@@ -7,6 +7,9 @@
     <color name="holo_list_text">@android:color/darker_gray</color>
     <color name="holo_background">@android:color/holo_blue_light</color>
     <color name="holo_button_divider">@android:color/darker_gray</color>
+    <color name="app_background">#efefef</color>
+
+
 
 
 </resources>
