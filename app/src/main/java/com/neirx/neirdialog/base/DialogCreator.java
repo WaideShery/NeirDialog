@@ -20,9 +20,9 @@ public class DialogCreator {
 
     protected void setStyle(){
         style = DialogStyle.Holo;
-        backgroundWindow = context.getResources().getColor(R.color.holo_green_light);
-        titleColor = context.getResources().getColor(R.color.holo_green_light);
-        textColor = context.getResources().getColor(R.color.dark_grey);
+        //backgroundWindow = context.getResources().getColor(R.color.holo_green_light);
+        //titleColor = context.getResources().getColor(R.color.holo_green_light);
+        //textColor = context.getResources().getColor(R.color.dark_grey);
         dividerColor = titleColor;
         editFocusColor = titleColor;
         editNonFocusColor = context.getResources().getColor(R.color.holo_green_dark);
