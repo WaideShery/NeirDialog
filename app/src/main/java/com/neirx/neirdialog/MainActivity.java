@@ -6,23 +6,98 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.neirx.neirdialog.dialogs.ListDialogFragment;
+import com.neirx.neirdialog.dialogs.MessageDialogFragment;
+import com.neirx.neirdialog.dialogs.SimpleDialogFragment;
 
 
 public class MainActivity extends Activity {
+
+    Button btnSimpleDialogThreeBtn, btnSimpleDialogTwoBtn, btnSimpleDialogOneBtn, btnSimpleDialogNoBtnNoTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnDialog = (Button) findViewById(R.id.btnDialog);
-        btnDialog.setOnClickListener(new View.OnClickListener() {
+        btnSimpleDialogOneBtn = (Button) findViewById(R.id.btnSimpleDialogOneBtn);
+        btnSimpleDialogTwoBtn = (Button) findViewById(R.id.btnSimpleDialogTwoBtn);
+        btnSimpleDialogThreeBtn = (Button) findViewById(R.id.btnSimpleDialogThreeBtn);
+        btnSimpleDialogNoBtnNoTitle = (Button) findViewById(R.id.btnSimpleDialogNoBtnNoTitle);
+
+        btnSimpleDialogOneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListDialogFragment listDialog = new ListDialogFragment();
-                listDialog.show(getFragmentManager(), "MyDF");
+                MessageDialogFragment standardDialog = new MessageDialogFragment();
+                standardDialog.setMessage("Default message");
+                standardDialog.setTitle("Title");
+                standardDialog.setNegativeButton("Ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.show(getFragmentManager(), "btnSimpleDialogOneBtn");
+            }
+        });
+
+        btnSimpleDialogTwoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageDialogFragment standardDialog = new MessageDialogFragment();
+                standardDialog.setMessage("Default message");
+                standardDialog.setTitle("Title");
+                standardDialog.setNegativeButton("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.setPositiveButton("Done", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.show(getFragmentManager(), "btnSimpleDialogTwoBtn");
+            }
+        });
+
+        btnSimpleDialogThreeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageDialogFragment standardDialog = new MessageDialogFragment();
+                standardDialog.setMessage("Default message");
+                standardDialog.setTitle("Title");
+                standardDialog.setNegativeButton("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.setNeutralButton("Neutral", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Neutral", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.setPositiveButton("Done", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                standardDialog.show(getFragmentManager(), "btnSimpleDialogThreeBtn");
+            }
+        });
+
+        btnSimpleDialogNoBtnNoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageDialogFragment standardDialog = new MessageDialogFragment();
+                standardDialog.setMessage("Default message");
+                standardDialog.show(getFragmentManager(), "btnSimpleDialogNoBtnNoTitle");
             }
         });
     }
