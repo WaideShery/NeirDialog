@@ -2,6 +2,7 @@ package com.neirx.neirdialogsdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +44,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 MessageDialogFragment standardDialog = dialogCreator.getMessageDialog();
                 standardDialog.setMessage("Default message");
-                standardDialog.setTitle("Title");
+                standardDialog.setTitle("Title");;
                 standardDialog.setNegativeButton("Ok", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -79,6 +80,7 @@ public class MainActivity extends Activity {
         btnSimpleDialogThreeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("ThisApp", "Step -2");
                 MessageDialogFragment standardDialog = dialogCreator.getMessageDialog();
                 standardDialog.setMessage("Default message");
                 standardDialog.setTitle("Title");
@@ -101,6 +103,7 @@ public class MainActivity extends Activity {
                     }
                 });
                 standardDialog.show(getFragmentManager(), "btnSimpleDialogThreeBtn");
+                Log.d("ThisApp", "Step -1");
             }
         });
 

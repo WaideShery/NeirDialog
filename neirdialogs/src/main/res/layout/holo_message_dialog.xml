@@ -20,6 +20,6 @@
             android:textSize="@dimen/message_text_size" />
     </ScrollView>
 
-    <include layout="@layout/buttons_part"/>
+    <include layout="@layout/buttons_part" android:id="@+id/layButtons"/>
 
 </LinearLayout>

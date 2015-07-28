@@ -4,8 +4,10 @@ package com.neirx.neirdialogs.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -31,11 +33,13 @@ public class MessageDialogFragment extends BaseDialogFragment {
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
+        layButtons = view.findViewById(R.id.layButtons);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         dividerTitle = view.findViewById(R.id.dividerTitle);
         tvMessage = (TextView) view.findViewById(R.id.tvMessage);
         svMessage = (ScrollView) view.findViewById(R.id.svMessage);
 
+        //checkDialogBackground();
         checkTitle();
         checkButtons();
 

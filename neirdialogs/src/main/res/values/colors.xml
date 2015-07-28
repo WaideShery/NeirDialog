@@ -7,9 +7,12 @@
     <color name="holo_list_text">@android:color/darker_gray</color>
     <color name="holo_background">@android:color/holo_blue_light</color>
     <color name="holo_button_divider">@android:color/darker_gray</color>
-    <color name="button_border">@android:color/darker_gray</color>
     <color name="dialog_background">#F1F1F1</color>
     <color name="pressed_button">@android:color/holo_green_light</color>
+
+    <color name="button_border">#aaa</color>
+    <color name="holo_blue">#33b5e5</color>
+    <color name="holo_dark_text">#ff000000</color>
 
 
 
