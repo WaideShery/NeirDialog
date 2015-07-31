@@ -3,6 +3,7 @@ package com.neirx.neirdialogs.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +21,51 @@ public class MessageDialogFragment extends BaseDialogFragment {
     protected TextView tvMessage;
     protected ScrollView svMessage;
     protected String message;
+    protected int messageColor;
+    protected float messageSize;
+    protected TextStyle messageStyle;
+    protected Typeface messageTypeface;
 
-    public void setMessage(String message) {
+    /**
+     * Установка текста сообщения диалогового окна.
+     * Если не вызывать этот метод, то область сообщения будет пустой.
+     *
+     * @param message текст сообщения диалогового окна
+     */
+    public void setTitle(String message) {
         this.message = message;
     }
+
+
+    /**
+     * Установка цвета сообщения диалогового окна.
+     *
+     * @param color ресурс цвета
+     */
+    public void setTitleColor(int color) {
+        messageColor = color;
+    }
+
+    /**
+     * Установка размера шрифта сообщения диалогового окна.
+     *
+     * @param sizeSp размер шрифта
+     */
+    public void setTitleSize(float sizeSp) {
+        messageSize = sizeSp;
+    }
+
+    /**
+     * Установка шрифта и стиля отображения сообщения диалогового окна.
+     *
+     * @param tf    шрифт
+     * @param style стиль текста
+     */
+    public void setTitleTypeface(Typeface tf, TextStyle style) {
+        messageTypeface = tf;
+        messageStyle = style;
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,6 +86,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
         checkDialogBackground();
         checkTitle();
         checkButtons();
+        checkMessage();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
@@ -51,6 +94,10 @@ public class MessageDialogFragment extends BaseDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Метод проверки, установлен ли текст сообщения диалогового окна.
+     * Если не установлен, то область сообщения остается пустой.
+     */
     protected void checkMessage() {
         if (message == null) {
             message = "";

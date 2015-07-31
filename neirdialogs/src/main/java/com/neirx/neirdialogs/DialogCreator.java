@@ -16,8 +16,9 @@ import com.neirx.neirdialogs.dialog.TextStyle;
 public abstract class DialogCreator {
     enum DialogStyle {Holo, Material}
 
-    int titleColor, titleSize, dividerTitleColor, dividerTitleHeight, buttonTextColor,
-            buttonTextSize, dividerButtonsColor, backgroundDialogColor;
+    int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor,
+            buttonTextSize, dividerButtonsColor, backgroundDialogColor, messageColor;
+    float titleSize, messageSize;
     Typeface titleTypeface, buttonTextTypeface;
     TextStyle titleStyle, buttonTextStyle;
     Context context;

@@ -265,7 +265,6 @@ public abstract class BaseDialogFragment extends DialogFragment {
             if (dividerTitleResId == 0) {
                 dividerTitle.setBackgroundColor(dividerTitleColor);
             } else {
-                if(dividerTitleResId != 0)
                 dividerTitle.setBackgroundResource(dividerTitleResId);
             }
             if(dividerTitleHeight != 0) {
