@@ -29,6 +29,8 @@ public class MessageDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_message_dialog, null);
+        lineBtnFirst = view.findViewById(R.id.viewHorFirst);
+        lineBtnSecond = view.findViewById(R.id.viewHorSecond);
         btnNegative = (Button) view.findViewById(R.id.btnNegative);
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);
@@ -39,7 +41,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
         tvMessage = (TextView) view.findViewById(R.id.tvMessage);
         svMessage = (ScrollView) view.findViewById(R.id.svMessage);
 
-        //checkDialogBackground();
+        checkDialogBackground();
         checkTitle();
         checkButtons();
 

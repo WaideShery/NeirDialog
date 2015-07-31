@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -270,7 +271,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
             if(dividerTitleHeight != 0) {
                 int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         dividerTitleHeight, getResources().getDisplayMetrics());
-                dividerTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+                dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
             }
         }
     }
@@ -334,6 +335,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 break;
             case 2:
                 btnNeutral.setVisibility(View.GONE);
+                lineBtnSecond.setVisibility(View.GONE);
                 if (negativeButton != null) {
                     btnNegative.setText(negativeButton);
                     btnNegative.setOnClickListener(negativeButtonListener);
