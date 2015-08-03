@@ -1,5 +1,6 @@
 package com.neirx.neirdialogs.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,29 +10,31 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.helper.ChoiceItem;
+import com.neirx.neirdialogs.interfaces.ChoiceItem;
+
+import java.util.List;
 
 /**
  * Created by Waide Shery on 25.07.2015.
  */
 public class SingleChoiceAdapter extends BaseAdapter {
     LayoutInflater lInflater;
-    TextView textView;
     RadioButton radioButton;
-    ChoiceItem[] choiceItems;
+    List<ChoiceItem> listItems;
 
-    public SingleChoiceAdapter(ChoiceItem[] choiceItems){
-        this.choiceItems = choiceItems;
+    public SingleChoiceAdapter(List<ChoiceItem> listItems, Context context) {
+        this.listItems = listItems;
+        lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return choiceItems.length;
+        return listItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return choiceItems[position];
+        return listItems.get(position);
     }
 
     @Override
@@ -45,13 +48,10 @@ public class SingleChoiceAdapter extends BaseAdapter {
         if (view == null) {
             view = lInflater.inflate(R.layout.adapter_singlechoice, parent, false);
         }
-        textView = (TextView) view.findViewById(R.id.textView);
         radioButton = (RadioButton) view.findViewById(R.id.radioButton);
-
-        for (ChoiceItem item : choiceItems){
-            textView.setText(item.getTitle());
-            radioButton.setChecked(item.isChecked());
-        }
+        ChoiceItem item = listItems.get(position);
+        radioButton.setText(item.getTitle());
+        radioButton.setChecked(item.isChecked());
         return view;
     }
 }

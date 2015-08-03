@@ -8,7 +8,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.helper.ChoiceItem;
 
 /**
  * Created by Waide Shery on 25.07.2015.

@@ -3,18 +3,14 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RadioButton
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView"
-        android:layout_weight="1"/>
-
-    <RadioButton
-        android:layout_width="wrap_content"
+        android:button="@null"
+        android:drawableRight="@drawable/holo_radiobtn_selector"
+        android:gravity="start"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/radioButton" />
-
 
 </LinearLayout>

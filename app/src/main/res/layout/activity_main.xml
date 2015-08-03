@@ -45,6 +45,13 @@
                 android:layout_height="wrap_content"
                 android:text="Show Simple Dialog without buttons and title" />
 
+
+            <Button
+                android:id="@+id/btnSingleChoiceBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Single Choice Dialog with all buttons" />
+
         </LinearLayout>
 
     </ScrollView>

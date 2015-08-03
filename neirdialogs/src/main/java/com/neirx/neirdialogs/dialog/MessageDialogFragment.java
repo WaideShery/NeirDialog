@@ -32,7 +32,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
      *
      * @param message текст сообщения диалогового окна
      */
-    public void setTitle(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
@@ -42,7 +42,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
      *
      * @param color ресурс цвета
      */
-    public void setTitleColor(int color) {
+    public void setMessageColor(int color) {
         messageColor = color;
     }
 
@@ -51,7 +51,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
      *
      * @param sizeSp размер шрифта
      */
-    public void setTitleSize(float sizeSp) {
+    public void setMessageSize(float sizeSp) {
         messageSize = sizeSp;
     }
 
@@ -61,7 +61,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
      * @param tf    шрифт
      * @param style стиль текста
      */
-    public void setTitleTypeface(Typeface tf, TextStyle style) {
+    public void setMessageTypeface(Typeface tf, TextStyle style) {
         messageTypeface = tf;
         messageStyle = style;
     }

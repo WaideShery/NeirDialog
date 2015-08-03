@@ -1,6 +1,7 @@
 package com.neirx.neirdialogsdemo;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.neirx.neirdialogs.DialogCreator;
 

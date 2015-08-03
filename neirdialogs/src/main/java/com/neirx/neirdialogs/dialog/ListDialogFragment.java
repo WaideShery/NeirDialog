@@ -13,15 +13,11 @@ import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
 import com.neirx.neirdialogs.adapter.ListChoiceAdapter;
-import com.neirx.neirdialogs.adapter.MultiChoiceAdapter;
-import com.neirx.neirdialogs.adapter.SingleChoiceAdapter;
-import com.neirx.neirdialogs.helper.ChoiceItem;
 
 
 public class ListDialogFragment extends BaseDialogFragment {
     protected ListView lvChoice;
     protected String[] items;
-    boolean isMultiChoice;
 
     public void setItems(String[] items) {
         this.items = items;
@@ -32,6 +28,8 @@ public class ListDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_list_dialog, null);
+        lineBtnFirst = view.findViewById(R.id.viewHorFirst);
+        lineBtnSecond = view.findViewById(R.id.viewHorSecond);
         btnNegative = (Button) view.findViewById(R.id.btnNegative);
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);

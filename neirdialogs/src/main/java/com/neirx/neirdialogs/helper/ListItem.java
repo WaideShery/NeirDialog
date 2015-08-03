@@ -1,9 +1,11 @@
 package com.neirx.neirdialogs.helper;
 
+import com.neirx.neirdialogs.interfaces.ChoiceItem;
+
 /**
  * Created by Waide Shery on 25.07.2015.
  */
-public class ChoiceItem {
+public class ListItem implements ChoiceItem {
     String title;
     boolean isChecked;
 
@@ -15,7 +17,7 @@ public class ChoiceItem {
         return title;
     }
 
-    public ChoiceItem(String title, boolean isChecked) {
+    public ListItem(String title, boolean isChecked) {
         this.title = title;
         this.isChecked = isChecked;
     }

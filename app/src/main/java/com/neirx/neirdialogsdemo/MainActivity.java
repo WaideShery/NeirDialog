@@ -10,12 +10,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.neirx.neirdialogs.dialog.MessageDialogFragment;
+import com.neirx.neirdialogs.dialog.SelectDialogFragment;
+import com.neirx.neirdialogs.helper.ChoiceItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
     CustomDialogCreator dialogCreator;
-
-    Button btnSimpleDialogThreeBtn, btnSimpleDialogTwoBtn, btnSimpleDialogOneBtn, btnSimpleDialogNoBtnNoTitle;
+    List<ChoiceItem> listItems;
+    Button btnSimpleDialogThreeBtn, btnSimpleDialogTwoBtn, btnSimpleDialogOneBtn, btnSimpleDialogNoBtnNoTitle,
+            btnSingleChoiceBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,7 @@ public class MainActivity extends Activity {
         btnSimpleDialogTwoBtn = (Button) findViewById(R.id.btnSimpleDialogTwoBtn);
         btnSimpleDialogThreeBtn = (Button) findViewById(R.id.btnSimpleDialogThreeBtn);
         btnSimpleDialogNoBtnNoTitle = (Button) findViewById(R.id.btnSimpleDialogNoBtnNoTitle);
+        btnSingleChoiceBtn = (Button) findViewById(R.id.btnSingleChoiceBtn);
 
         dialogCreator = CustomDialogCreator.getInstance(this);
 
@@ -35,7 +42,24 @@ public class MainActivity extends Activity {
     }
 
     private void setListenerListButtons() {
-        dialogCreator.getListDialog();
+        listItems = new ArrayList<>();
+        listItems.add(new ChoiceItem("Портрет", false));
+        listItems.add(new ChoiceItem("Альбом", false));
+        listItems.add(new ChoiceItem("Авто", true));
+        btnSingleChoiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectDialogFragment singleChoiceDialog = dialogCreator.getSelectDialog(false, listItems);
+                singleChoiceDialog.setTitle("Title");
+                singleChoiceDialog.setNegativeButton("Ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                singleChoiceDialog.show(getFragmentManager(), "tag");
+            }
+        });
     }
 
     private void setListenerMessageButtons(){

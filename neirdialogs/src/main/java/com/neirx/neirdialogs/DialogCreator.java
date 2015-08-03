@@ -11,19 +11,22 @@ import com.neirx.neirdialogs.dialog.ListDialogFragment;
 import com.neirx.neirdialogs.dialog.MessageDialogFragment;
 import com.neirx.neirdialogs.dialog.SelectDialogFragment;
 import com.neirx.neirdialogs.dialog.TextStyle;
+import com.neirx.neirdialogs.interfaces.ChoiceItem;
+
+import java.util.List;
 
 
 public abstract class DialogCreator {
-    enum DialogStyle {Holo, Material}
+    protected enum DialogStyle {Holo, Material}
 
-    int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor,
+    protected int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor,
             buttonTextSize, dividerButtonsColor, backgroundDialogColor, messageColor;
-    float titleSize, messageSize;
-    Typeface titleTypeface, buttonTextTypeface;
-    TextStyle titleStyle, buttonTextStyle;
-    Context context;
+    protected float titleSize, messageSize;
+    protected Typeface titleTypeface, buttonTextTypeface, messageTypeface;
+    protected TextStyle titleStyle, buttonTextStyle, messageStyle;
+    protected Context context;
     @DrawableRes
-    int dividerTitleResId, buttonSelectorId, backgroundDialogResId;
+    protected int dividerTitleResId, buttonSelectorId, backgroundDialogResId;
 
 
     protected DialogCreator(Context context) {
@@ -47,15 +50,22 @@ public abstract class DialogCreator {
         buttonTextStyle = TextStyle.NORMAL;
         buttonSelectorId = R.drawable.holo_btn_selector;
         dividerButtonsColor = context.getResources().getColor(R.color.button_border);
+
+        messageColor = context.getResources().getColor(R.color.holo_dark_text);
+        messageSize = 14;
+        messageTypeface = Typeface.DEFAULT;
+        messageStyle = TextStyle.NORMAL;
     }
 
     public ListDialogFragment getListDialog() {
         return new ListDialogFragment();
     }
 
-    public SelectDialogFragment getSelectDialog(boolean isMultiChoice) {
+    public SelectDialogFragment getSelectDialog(boolean isMultiChoice, List<ChoiceItem> items) {
         SelectDialogFragment dialog = new SelectDialogFragment();
+        setBaseProperties(dialog);
         dialog.setChoiceMode(isMultiChoice);
+        dialog.setItems(items);
         return dialog;
     }
 
@@ -73,6 +83,11 @@ public abstract class DialogCreator {
         return dialog;
     }
 
+    private void setMessageProperties(MessageDialogFragment dialog){
+        dialog.setMessageColor(messageColor);
+        dialog.setMessageSize(messageSize);
+        dialog.setMessageTypeface(messageTypeface, messageStyle);
+    }
 
     private void setBaseProperties(BaseDialogFragment dialog) {
         dialog.setDialogBackgroundColor(backgroundDialogColor);
