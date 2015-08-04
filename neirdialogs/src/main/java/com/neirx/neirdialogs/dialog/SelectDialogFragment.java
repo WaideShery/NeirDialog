@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -128,9 +127,11 @@ public class SelectDialogFragment extends BaseDialogFragment {
     protected void checkList() {
         BaseAdapter adapter;
         if(isMultiChoice) {
-            adapter = new MultiChoiceAdapter(items, getActivity());
+            adapter = new MultiChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
+                    itemTextTypeface, flagSelector, itemBackgroundSelector);
         } else {
-            adapter = new SingleChoiceAdapter(items, getActivity());
+            adapter = new SingleChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
+                    itemTextTypeface, flagSelector, itemBackgroundSelector);
         }
         lvChoice.setAdapter(adapter);
     }

@@ -11,6 +11,7 @@
     <color name="pressed_button">@android:color/holo_green_light</color>
 
     <color name="button_border">#aaa</color>
+    <color name="list_item_bg">#aaa</color>
     <color name="holo_blue">#33b5e5</color>
     <color name="holo_dark_text">#ff000000</color>
 

@@ -11,7 +11,8 @@ import android.widget.Toast;
 
 import com.neirx.neirdialogs.dialog.MessageDialogFragment;
 import com.neirx.neirdialogs.dialog.SelectDialogFragment;
-import com.neirx.neirdialogs.helper.ChoiceItem;
+import com.neirx.neirdialogs.helper.ListItem;
+import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,9 @@ public class MainActivity extends Activity {
 
     private void setListenerListButtons() {
         listItems = new ArrayList<>();
-        listItems.add(new ChoiceItem("Портрет", false));
-        listItems.add(new ChoiceItem("Альбом", false));
-        listItems.add(new ChoiceItem("Авто", true));
+        listItems.add(new ListItem("Портрет", false));
+        listItems.add(new ListItem("Альбом", false));
+        listItems.add(new ListItem("Авто", true));
         btnSingleChoiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

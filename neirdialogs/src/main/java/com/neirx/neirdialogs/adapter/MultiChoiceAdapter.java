@@ -1,6 +1,8 @@
 package com.neirx.neirdialogs.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.dialog.TextStyle;
 import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
 import java.util.List;
@@ -17,14 +20,29 @@ import java.util.List;
  * Created by Waide Shery on 25.07.2015.
  */
 public class MultiChoiceAdapter extends BaseAdapter {
-    LayoutInflater lInflater;
-    TextView textView;
-    CheckBox checkBox;
-    List<ChoiceItem> listItems;
+    private LayoutInflater lInflater;
+    private Context context;
+    private CheckBox checkBox;
+    private List<ChoiceItem> listItems;
+    private int textColor;
+    private float textSize;
+    private TextStyle textStyle;
+    private Typeface textTypeface;
+    @DrawableRes private int flagSelector, bgSelector;
 
-    public MultiChoiceAdapter(List<ChoiceItem> listItems, Context context){
+    public MultiChoiceAdapter(List<ChoiceItem> listItems, Context context, int textColor, float textSize,
+                              TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector){
         this.listItems = listItems;
+        this.context = context;
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.textColor = textColor;
+        this.textSize = textSize;
+        this.textStyle = textStyle;
+        this.textTypeface = textTypeface;
+        this.bgSelector = bgSelector;
+        this.flagSelector = flagSelector;
+        this.bgSelector = bgSelector;
+
     }
 
     @Override
@@ -48,13 +66,15 @@ public class MultiChoiceAdapter extends BaseAdapter {
         if (view == null) {
             view = lInflater.inflate(R.layout.adapter_multichoice, parent, false);
         }
-        textView = (TextView) view.findViewById(R.id.textView);
         checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-
-        for (ChoiceItem item : listItems){
-            textView.setText(item.getTitle());
-            checkBox.setChecked(item.isChecked());
-        }
+        ChoiceItem item = listItems.get(position);
+        checkBox.setText(item.getTitle());
+        checkBox.setChecked(item.isChecked());
+        checkBox.setTextColor(textColor);
+        checkBox.setTextSize(textSize);
+        checkBox.setTypeface(textTypeface, textStyle.getValue());
+        checkBox.setCompoundDrawables(context.getResources().getDrawable(flagSelector), null, null, null);
+        checkBox.setBackgroundResource(bgSelector);
         return view;
     }
 }

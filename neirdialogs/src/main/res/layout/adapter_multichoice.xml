@@ -3,17 +3,13 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <CheckBox
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView"
-        android:layout_weight="1"/>
-
-    <CheckBox
-        android:button="@drawable/holo_checkbox_selector"
-        android:layout_width="wrap_content"
+        android:button="@null"
+        android:drawableRight="@drawable/holo_checkbox_selector"
+        android:gravity="start"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/checkBox" />
 

@@ -256,22 +256,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
             layTitle.setVisibility(View.GONE);
         } else {
             tvTitle.setText(title);
-            if(titleColor != 0)
-                tvTitle.setTextColor(titleColor);
-            if(titleSize != 0)
-                tvTitle.setTextSize(titleSize);
-            if(titleTypeface !=null && titleStyle != null)
-                tvTitle.setTypeface(titleTypeface, titleStyle.getValue());
+            tvTitle.setTextColor(titleColor);
+            tvTitle.setTextSize(titleSize);
+            tvTitle.setTypeface(titleTypeface, titleStyle.getValue());
             if (dividerTitleResId == 0) {
                 dividerTitle.setBackgroundColor(dividerTitleColor);
             } else {
                 dividerTitle.setBackgroundResource(dividerTitleResId);
             }
-            if(dividerTitleHeight != 0) {
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        dividerTitleHeight, getResources().getDisplayMetrics());
-                dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-            }
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dividerTitleHeight,
+                    getResources().getDisplayMetrics());
+            dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+
         }
     }
 
@@ -292,22 +288,22 @@ public abstract class BaseDialogFragment extends DialogFragment {
      */
     protected void checkButtons() {
         //layButtons.setBackgroundColor(dividerButtonsColor);
-        if(buttonTextColor != 0) {
+        if (buttonTextColor != 0) {
             btnNegative.setTextColor(buttonTextColor);
             btnNeutral.setTextColor(buttonTextColor);
             btnPositive.setTextColor(buttonTextColor);
         }
-        if(buttonTextSize != 0) {
+        if (buttonTextSize != 0) {
             btnNegative.setTextSize(buttonTextSize);
             btnNeutral.setTextSize(buttonTextSize);
             btnPositive.setTextSize(buttonTextSize);
         }
-        if(buttonTextTypeface != null && buttonTextStyle != null) {
+        if (buttonTextTypeface != null && buttonTextStyle != null) {
             btnNegative.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
             btnNeutral.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
             btnPositive.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
         }
-        if(buttonSelectorId != 0) {
+        if (buttonSelectorId != 0) {
             btnNegative.setBackgroundResource(buttonSelectorId);
             btnNeutral.setBackgroundResource(buttonSelectorId);
             btnPositive.setBackgroundResource(buttonSelectorId);

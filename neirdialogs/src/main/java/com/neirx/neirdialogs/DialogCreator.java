@@ -20,13 +20,15 @@ public abstract class DialogCreator {
     protected enum DialogStyle {Holo, Material}
 
     protected int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor,
-            buttonTextSize, dividerButtonsColor, backgroundDialogColor, messageColor;
-    protected float titleSize, messageSize;
-    protected Typeface titleTypeface, buttonTextTypeface, messageTypeface;
-    protected TextStyle titleStyle, buttonTextStyle, messageStyle;
+            buttonTextSize, dividerButtonsColor, backgroundDialogColor, messageColor,
+            selectItemTextColor;
+    protected float titleSize, messageSize, selectItemTextSize;
+    protected Typeface titleTypeface, buttonTextTypeface, messageTypeface, selectItemTextTypeface;
+    protected TextStyle titleStyle, buttonTextStyle, messageStyle, selectItemTextStyle;
     protected Context context;
     @DrawableRes
-    protected int dividerTitleResId, buttonSelectorId, backgroundDialogResId;
+    protected int dividerTitleResId, buttonSelectorId, backgroundDialogResId, selectItemBackgroundSelector,
+            singleFlagSelector, multiFlagSelector;
 
 
     protected DialogCreator(Context context) {
@@ -55,6 +57,14 @@ public abstract class DialogCreator {
         messageSize = 14;
         messageTypeface = Typeface.DEFAULT;
         messageStyle = TextStyle.NORMAL;
+
+        selectItemTextColor = context.getResources().getColor(R.color.holo_dark_text);
+        selectItemTextSize = 14;
+        selectItemTextTypeface = Typeface.DEFAULT;
+        selectItemTextStyle = TextStyle.NORMAL;
+        selectItemBackgroundSelector = R.drawable.holo_list_item_selector;
+        singleFlagSelector = R.drawable.holo_radiobtn_selector;
+        multiFlagSelector = R.drawable.holo_checkbox_selector;
     }
 
     public ListDialogFragment getListDialog() {
@@ -64,8 +74,15 @@ public abstract class DialogCreator {
     public SelectDialogFragment getSelectDialog(boolean isMultiChoice, List<ChoiceItem> items) {
         SelectDialogFragment dialog = new SelectDialogFragment();
         setBaseProperties(dialog);
-        dialog.setChoiceMode(isMultiChoice);
+        setSelectItemProperties(dialog);
         dialog.setItems(items);
+        dialog.setChoiceMode(isMultiChoice);
+        if(isMultiChoice){
+            dialog.setFlagSelector(multiFlagSelector);
+        } else {
+            dialog.setFlagSelector(singleFlagSelector);
+
+        }
         return dialog;
     }
 
@@ -80,13 +97,17 @@ public abstract class DialogCreator {
     public MessageDialogFragment getMessageDialog() {
         MessageDialogFragment dialog = new MessageDialogFragment();
         setBaseProperties(dialog);
-        return dialog;
-    }
-
-    private void setMessageProperties(MessageDialogFragment dialog){
         dialog.setMessageColor(messageColor);
         dialog.setMessageSize(messageSize);
         dialog.setMessageTypeface(messageTypeface, messageStyle);
+        return dialog;
+    }
+
+    private void setSelectItemProperties(SelectDialogFragment dialog) {
+        dialog.setItemBackgroundSelector(selectItemBackgroundSelector);
+        dialog.setItemTextColor(selectItemTextColor);
+        dialog.setItemTextSize(selectItemTextSize);
+        dialog.setItemTextTypeface(selectItemTextTypeface, selectItemTextStyle);
     }
 
     private void setBaseProperties(BaseDialogFragment dialog) {
