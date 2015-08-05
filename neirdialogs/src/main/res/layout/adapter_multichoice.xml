@@ -9,6 +9,7 @@
         android:button="@null"
         android:drawableRight="@drawable/holo_checkbox_selector"
         android:gravity="start"
+        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/checkBox" />

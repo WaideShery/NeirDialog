@@ -30,6 +30,21 @@ public class SelectDialogFragment extends BaseDialogFragment {
     protected TextStyle itemTextStyle;
     protected Typeface itemTextTypeface;
     protected int flagSelector, itemBackgroundSelector;
+    protected SelectItemListener checkedItemListener = null;
+    protected int requestCode = -1;
+
+    public interface SelectItemListener {
+        void onFinishSelectDialog(int requestCode, boolean[] checkedItems);
+    }
+
+    public void setSelectItemListener(SelectItemListener listener){
+        checkedItemListener = listener;
+    }
+
+    public void setSelectItemListener(SelectItemListener listener, int requestCode){
+        checkedItemListener = listener;
+        this.requestCode = requestCode;
+    }
 
     /**
      * Установка вида списка ListView: одиночный выбор или множественный.
@@ -128,10 +143,10 @@ public class SelectDialogFragment extends BaseDialogFragment {
         BaseAdapter adapter;
         if(isMultiChoice) {
             adapter = new MultiChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
-                    itemTextTypeface, flagSelector, itemBackgroundSelector);
+                    itemTextTypeface, flagSelector, itemBackgroundSelector, checkedItemListener, requestCode);
         } else {
             adapter = new SingleChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
-                    itemTextTypeface, flagSelector, itemBackgroundSelector);
+                    itemTextTypeface, flagSelector, itemBackgroundSelector, checkedItemListener, requestCode);
         }
         lvChoice.setAdapter(adapter);
     }

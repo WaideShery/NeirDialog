@@ -21,4 +21,8 @@ public class ListItem implements ChoiceItem {
         this.title = title;
         this.isChecked = isChecked;
     }
+
+    public void setChecked(boolean state){
+        isChecked = state;
+    }
 }

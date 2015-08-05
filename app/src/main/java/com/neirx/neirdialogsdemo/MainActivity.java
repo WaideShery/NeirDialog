@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SelectDialogFragment.SelectItemListener {
     CustomDialogCreator dialogCreator;
     List<ChoiceItem> listItems;
     Button btnSimpleDialogThreeBtn, btnSimpleDialogTwoBtn, btnSimpleDialogOneBtn, btnSimpleDialogNoBtnNoTitle,
-            btnSingleChoiceBtn;
+            btnSingleChoiceBtn, btnMultiChoiceBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
         btnSimpleDialogThreeBtn = (Button) findViewById(R.id.btnSimpleDialogThreeBtn);
         btnSimpleDialogNoBtnNoTitle = (Button) findViewById(R.id.btnSimpleDialogNoBtnNoTitle);
         btnSingleChoiceBtn = (Button) findViewById(R.id.btnSingleChoiceBtn);
+        btnMultiChoiceBtn = (Button) findViewById(R.id.btnMultiChoiceBtn);
 
         dialogCreator = CustomDialogCreator.getInstance(this);
 
@@ -58,7 +59,30 @@ public class MainActivity extends Activity {
                         Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
                     }
                 });
+                singleChoiceDialog.setSelectItemListener(MainActivity.this);
                 singleChoiceDialog.show(getFragmentManager(), "tag");
+            }
+        });
+        btnMultiChoiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final SelectDialogFragment multiChoiceDialog = dialogCreator.getSelectDialog(true, listItems);
+                multiChoiceDialog.setPositiveButton("Done", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        multiChoiceDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                multiChoiceDialog.setNeutralButton("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        multiChoiceDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                multiChoiceDialog.setSelectItemListener(MainActivity.this, 1122);
+                multiChoiceDialog.show(getFragmentManager(), "multi-tag");
             }
         });
     }
@@ -162,5 +186,24 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFinishSelectDialog(int requestCode, boolean[] checkedItems) {
+        if(requestCode == 1122){
+            int count = 0;
+            for (boolean isChecked : checkedItems) {
+                if (isChecked) {
+                    count++;
+                }
+            }
+            Toast.makeText(this, "выбранно " + count+ " элементов ", Toast.LENGTH_SHORT).show();
+        } else {
+            for (int i = 0; i < checkedItems.length; i++) {
+                if (checkedItems[i]) {
+                    Toast.makeText(this, "id выбранного элемента: " + i, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 }

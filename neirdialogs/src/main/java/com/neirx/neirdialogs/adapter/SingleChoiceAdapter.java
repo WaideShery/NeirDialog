@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.dialog.SelectDialogFragment;
 import com.neirx.neirdialogs.dialog.TextStyle;
 import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
@@ -31,9 +30,13 @@ public class SingleChoiceAdapter extends BaseAdapter {
     private Typeface textTypeface;
     @DrawableRes
     private int flagSelector, bgSelector;
+    private SelectDialogFragment.SelectItemListener listener = null;
+    private int requestCode = -1;
+    int selectedPosition = 0;
 
     public SingleChoiceAdapter(List<ChoiceItem> listItems, Context context, int textColor, float textSize,
-                               TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector){
+                               TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector,
+                               SelectDialogFragment.SelectItemListener listener, int requestCode){
         this.listItems = listItems;
         this.context = context;
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -44,6 +47,13 @@ public class SingleChoiceAdapter extends BaseAdapter {
         this.bgSelector = bgSelector;
         this.flagSelector = flagSelector;
         this.bgSelector = bgSelector;
+        this.listener = listener;
+        this.requestCode = requestCode;
+        for(int i=0; i<listItems.size(); i++){
+            if(listItems.get(i).isChecked()){
+                selectedPosition = i;
+            }
+        }
     }
 
     @Override
@@ -62,20 +72,39 @@ public class SingleChoiceAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = lInflater.inflate(R.layout.adapter_singlechoice, parent, false);
         }
         radioButton = (RadioButton) view.findViewById(R.id.radioButton);
-        ChoiceItem item = listItems.get(position);
+        final ChoiceItem item = listItems.get(position);
         radioButton.setText(item.getTitle());
-        radioButton.setChecked(item.isChecked());
+        radioButton.setChecked(selectedPosition == position);
         radioButton.setTextColor(textColor);
         radioButton.setTextSize(textSize);
         radioButton.setTypeface(textTypeface, textStyle.getValue());
-        radioButton.setCompoundDrawables(context.getResources().getDrawable(flagSelector), null, null, null);
+        radioButton.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(flagSelector), null);
         radioButton.setBackgroundResource(bgSelector);
+        radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean[] arrayItemsChecked = new boolean[listItems.size()];
+                for (int i = 0; i < listItems.size(); i++) {
+                    if (i != position) {
+                        arrayItemsChecked[i] = false;
+                    } else {
+                        arrayItemsChecked[i] = true;
+                        selectedPosition = i;
+                    }
+
+                }
+                if (listener != null) {
+                    listener.onFinishSelectDialog(requestCode, arrayItemsChecked);
+                }
+                SingleChoiceAdapter.this.notifyDataSetChanged();
+            }
+        });
         return view;
     }
 }

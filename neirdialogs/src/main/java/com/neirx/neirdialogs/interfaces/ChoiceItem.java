@@ -6,4 +6,5 @@ package com.neirx.neirdialogs.interfaces;
 public interface ChoiceItem {
     boolean isChecked();
     String getTitle();
+    void setChecked(boolean state);
 }
