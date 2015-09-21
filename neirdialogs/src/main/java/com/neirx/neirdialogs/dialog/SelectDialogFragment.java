@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,14 +22,10 @@ import com.neirx.neirdialogs.interfaces.ChoiceItem;
 import java.util.List;
 
 
-public class SelectDialogFragment extends BaseDialogFragment {
+public class SelectDialogFragment extends ListDialogFragment {
     protected ListView lvChoice;
     protected List<ChoiceItem> items;
     protected boolean isMultiChoice;
-    protected int itemTextColor;
-    protected float itemTextSize;
-    protected TextStyle itemTextStyle;
-    protected Typeface itemTextTypeface;
     protected int flagSelector, itemBackgroundSelector;
     protected SelectItemListener checkedItemListener = null;
     protected int requestCode = -1;
@@ -37,14 +34,7 @@ public class SelectDialogFragment extends BaseDialogFragment {
         void onFinishSelectDialog(int requestCode, boolean[] checkedItems);
     }
 
-    public void setSelectItemListener(SelectItemListener listener){
-        checkedItemListener = listener;
-    }
 
-    public void setSelectItemListener(SelectItemListener listener, int requestCode){
-        checkedItemListener = listener;
-        this.requestCode = requestCode;
-    }
 
     /**
      * Установка вида списка ListView: одиночный выбор или множественный.
@@ -66,50 +56,12 @@ public class SelectDialogFragment extends BaseDialogFragment {
 
 
     /**
-     * Установка цвета текста пунктов списка.
-     *
-     * @param color ресурс цвета
-     */
-    public void setItemTextColor(int color) {
-        itemTextColor = color;
-    }
-
-    /**
-     * Установка размера шрифта текста пунктов списка.
-     *
-     * @param sizeSp размер шрифта
-     */
-    public void setItemTextSize(float sizeSp) {
-        itemTextSize = sizeSp;
-    }
-
-    /**
-     * Установка шрифта и стиля отображения текста пунктов списка.
-     *
-     * @param tf    шрифт
-     * @param style стиль текста
-     */
-    public void setItemTextTypeface(Typeface tf, TextStyle style) {
-        itemTextTypeface = tf;
-        itemTextStyle = style;
-    }
-
-    /**
      *Установка ресурса флажка переключателя.
      *
      * @param flagSelector ресурс флажка
      */
     public void setFlagSelector(@DrawableRes int flagSelector){
         this.flagSelector = flagSelector;
-    }
-
-    /**
-     * Установка селектора фона пунктов списка.
-     *
-     * @param itemBackgroundSelector селектор фона пунктов списка.
-     */
-    public void setItemBackgroundSelector(@DrawableRes int itemBackgroundSelector){
-        this.itemBackgroundSelector = itemBackgroundSelector;
     }
 
 
@@ -137,6 +89,11 @@ public class SelectDialogFragment extends BaseDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
         return builder.create();
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     protected void checkList() {

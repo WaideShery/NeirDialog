@@ -8,13 +8,29 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.neirx.neirdialogsdemo.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListDialogActivity"
+            android:label="@string/title_activity_message_dialog" >
+        </activity>
+        <activity
+            android:name=".MessageDialogActivity"
+            android:label="@string/title_activity_message_dialog" >
+        </activity>
+        <activity
+            android:name=".MultiChoiceDialogActivity"
+            android:label="@string/title_activity_multi_choice_dialog" >
+        </activity>
+        <activity
+            android:name=".SingleChoiceDialogActivity"
+            android:label="@string/title_activity_single_choice_dialog" >
         </activity>
     </application>
 

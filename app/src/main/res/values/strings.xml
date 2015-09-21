@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">NeirDialog</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_message_dialog">MessageDialogActivity</string>
+    <string name="title_activity_list_dialog">ListDialogActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_multi_choice_dialog">MultiChoiceDialogActivity</string>
+    <string name="title_activity_single_choice_dialog">SingleChoiceDialogActivity</string>
 </resources>

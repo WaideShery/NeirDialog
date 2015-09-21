@@ -46,6 +46,11 @@ public class EditTextDialogFragment extends BaseDialogFragment {
         return builder.create();
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
     protected void checkEditText() {
         if(text != null){
             editText.setText(text);

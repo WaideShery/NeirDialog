@@ -3,9 +3,12 @@ package com.neirx.neirdialogs.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 
 public class MessageDialogFragment extends BaseDialogFragment {
@@ -94,6 +99,22 @@ public class MessageDialogFragment extends BaseDialogFragment {
         return builder.create();
     }
 
+    @Override
+    public void onClick(View view) {
+        dismiss();
+        if(onClickListener == null){
+            return;
+        }
+        int id = view.getId();
+        if(id == R.id.btnPositive){
+            onClickListener.onClick(tag, NeirDialogInterface.BUTTON_POSITIVE);
+        } else if(id == R.id.btnNegative){
+            onClickListener.onClick(tag, NeirDialogInterface.BUTTON_NEGATIVE);
+        } else if(id == R.id.btnNeutral){
+            onClickListener.onClick(tag, NeirDialogInterface.BUTTON_NEUTRAL);
+        }
+    }
+
     /**
      * Метод проверки, установлен ли текст сообщения диалогового окна.
      * Если не установлен, то область сообщения остается пустой.
@@ -103,5 +124,8 @@ public class MessageDialogFragment extends BaseDialogFragment {
             message = "";
         }
         tvMessage.setText(message);
+        tvTitle.setTextColor(messageColor);
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, messageSize);
+        tvTitle.setTypeface(messageTypeface, messageStyle.getValue());
     }
 }

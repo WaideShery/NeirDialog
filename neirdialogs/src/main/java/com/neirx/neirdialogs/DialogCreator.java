@@ -38,7 +38,7 @@ public abstract class DialogCreator {
         backgroundDialogResId = 0;
 
         titleColor = context.getResources().getColor(R.color.holo_blue);
-        titleSize = 16;
+        titleSize = 20;
         titleTypeface = Typeface.DEFAULT;
         titleStyle = TextStyle.NORMAL;
 
@@ -47,14 +47,14 @@ public abstract class DialogCreator {
         dividerTitleHeight = 2;
 
         buttonTextColor = context.getResources().getColor(R.color.holo_dark_text);
-        buttonTextSize = 12;
+        buttonTextSize = 6;
         buttonTextTypeface = Typeface.DEFAULT;
         buttonTextStyle = TextStyle.NORMAL;
         buttonSelectorId = R.drawable.holo_btn_selector;
         dividerButtonsColor = context.getResources().getColor(R.color.button_border);
 
         messageColor = context.getResources().getColor(R.color.holo_dark_text);
-        messageSize = 14;
+        messageSize = 16;
         messageTypeface = Typeface.DEFAULT;
         messageStyle = TextStyle.NORMAL;
 
@@ -68,7 +68,10 @@ public abstract class DialogCreator {
     }
 
     public ListDialogFragment getListDialog() {
-        return new ListDialogFragment();
+        ListDialogFragment dialog = new ListDialogFragment();
+        setBaseProperties(dialog);
+        setSelectItemProperties(dialog);
+        return dialog;
     }
 
     public SelectDialogFragment getSelectDialog(boolean isMultiChoice, List<ChoiceItem> items) {
@@ -103,7 +106,7 @@ public abstract class DialogCreator {
         return dialog;
     }
 
-    private void setSelectItemProperties(SelectDialogFragment dialog) {
+    private void setSelectItemProperties(ListDialogFragment dialog) {
         dialog.setItemBackgroundSelector(selectItemBackgroundSelector);
         dialog.setItemTextColor(selectItemTextColor);
         dialog.setItemTextSize(selectItemTextSize);
@@ -111,6 +114,7 @@ public abstract class DialogCreator {
     }
 
     private void setBaseProperties(BaseDialogFragment dialog) {
+        Log.d(Statical.TAG, "setBaseProperties");
         dialog.setDialogBackgroundColor(backgroundDialogColor);
         dialog.setDialogBackground(backgroundDialogResId);
 

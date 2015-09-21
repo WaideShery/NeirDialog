@@ -7,6 +7,7 @@ import com.neirx.neirdialogs.DialogCreator;
 
 /**
  * Created by Waide Shery on 25.07.2015.
+ *
  */
 public class CustomDialogCreator extends DialogCreator {
     private static CustomDialogCreator instance;

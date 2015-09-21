@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.neirx.neirdialogs.Statical;
+import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
+
 /**
  * Абстрактный класс диалогового окна в стиле Holo. Включает в себя настройку Заглавия и Кнопок окна,
  * а также цвет фона, размеры, цвета и стили шрифтов.
  */
-public abstract class BaseDialogFragment extends DialogFragment {
+public abstract class BaseDialogFragment extends DialogFragment implements View.OnClickListener {
     protected View view, lineBtnFirst, lineBtnSecond;
     protected ViewGroup layTitle;
     View layButtons;
@@ -42,7 +46,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
     protected TextStyle buttonTextStyle;
     protected int buttonSelectorId;
     protected int dividerButtonsColor;
-
+    protected NeirDialogInterface.OnClickListener onClickListener;
+    protected String tag;
 
     /**
      * Абстрактный метод, в котором нужно установить layout с соответствующим диалоговым окном.
@@ -51,8 +56,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * tvTitle - TextView с тесктом заглавия.
      * dividerTitle - View, разделительная титульная полоса.
      * lineBtnFirst, lineBtnSecond - горизонтальные разделительные полосы между ккнопками.
-     * btnNegative, btnNeutral, btnPositive - Button, соответствующие view кнопок.
      * layButtons - ViewGroup, который включает кнопки и разделительные линии.
+     * btnNegative, btnNeutral, btnPositive - Button, соответствующие view кнопок.
      *
      * @param savedInstanceState Bundle с сохраненнім состоянием
      * @return Объект диалогового окна
@@ -195,11 +200,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * Если не вызывать этот метод, то диалоговое окно не будет включать Negative кнопку.
      *
      * @param titleButton текст кнопки
-     * @param listener    слушатель
      */
-    public void setNegativeButton(String titleButton, View.OnClickListener listener) {
+    public void setNegativeButton(String titleButton) {
         this.negativeButton = titleButton;
-        this.negativeButtonListener = listener;
         if (positiveButton != null && neutralButton != null) {
             buttonCount = 3;
         } else if (positiveButton != null || neutralButton != null) {
@@ -214,11 +217,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * Если не вызывать этот метод, то диалоговое окно не будет включать Positive кнопку.
      *
      * @param titleButton текст кнопки
-     * @param listener    слушатель
      */
-    public void setPositiveButton(String titleButton, View.OnClickListener listener) {
+    public void setPositiveButton(String titleButton) {
         this.positiveButton = titleButton;
-        this.positiveButtonListener = listener;
         if (negativeButton != null && neutralButton != null) {
             buttonCount = 3;
         } else if (negativeButton != null || neutralButton != null) {
@@ -233,11 +234,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * Если не вызывать этот метод, то диалоговое окно не будет включать Neutral кнопку.
      *
      * @param titleButton текст кнопки
-     * @param listener    слушатель
      */
-    public void setNeutralButton(String titleButton, View.OnClickListener listener) {
+    public void setNeutralButton(String titleButton) {
         this.neutralButton = titleButton;
-        this.neutralButtonListener = listener;
         if (negativeButton != null && positiveButton != null) {
             buttonCount = 3;
         } else if (negativeButton != null || positiveButton != null) {
@@ -248,6 +247,16 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     /**
+     * Метод для установки слушателя нажатия кнопок в диалоговом окне
+     * @param listener слушатель
+     * @param tag идентификатор диалогового окна
+     */
+    public void setOnClickListener(NeirDialogInterface.OnClickListener listener, String tag){
+        onClickListener = listener;
+        this.tag = tag;
+    }
+
+    /**
      * Метод проверки, установлено ли заглавие у окна.
      * Если не установлено, то соответствующее view скрывается.
      */
@@ -255,9 +264,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
         if (title == null) {
             layTitle.setVisibility(View.GONE);
         } else {
+            Log.d(Statical.TAG, "title = " + title);
+            Log.d(Statical.TAG, "titleColor = " + titleColor);
+            Log.d(Statical.TAG, "titleSize = " + titleSize);
             tvTitle.setText(title);
             tvTitle.setTextColor(titleColor);
-            tvTitle.setTextSize(titleSize);
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
             tvTitle.setTypeface(titleTypeface, titleStyle.getValue());
             if (dividerTitleResId == 0) {
                 dividerTitle.setBackgroundColor(dividerTitleColor);
@@ -294,9 +306,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
             btnPositive.setTextColor(buttonTextColor);
         }
         if (buttonTextSize != 0) {
-            btnNegative.setTextSize(buttonTextSize);
-            btnNeutral.setTextSize(buttonTextSize);
-            btnPositive.setTextSize(buttonTextSize);
+            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
         }
         if (buttonTextTypeface != null && buttonTextStyle != null) {
             btnNegative.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
@@ -319,13 +331,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 btnPositive.setVisibility(View.GONE);
                 if (negativeButton != null) {
                     btnNeutral.setText(negativeButton);
-                    btnNeutral.setOnClickListener(negativeButtonListener);
+                    btnNeutral.setOnClickListener(this);
                 } else if (positiveButton != null) {
                     btnNeutral.setText(positiveButton);
-                    btnNeutral.setOnClickListener(positiveButtonListener);
+                    btnNeutral.setOnClickListener(this);
                 } else {
                     btnNeutral.setText(neutralButton);
-                    btnNeutral.setOnClickListener(neutralButtonListener);
+                    btnNeutral.setOnClickListener(this);
                 }
                 break;
             case 2:
@@ -333,30 +345,32 @@ public abstract class BaseDialogFragment extends DialogFragment {
                 lineBtnSecond.setVisibility(View.GONE);
                 if (negativeButton != null) {
                     btnNegative.setText(negativeButton);
-                    btnNegative.setOnClickListener(negativeButtonListener);
+                    btnNegative.setOnClickListener(this);
                     if (positiveButton != null) {
                         btnPositive.setText(positiveButton);
-                        btnPositive.setOnClickListener(positiveButtonListener);
+                        btnPositive.setOnClickListener(this);
                     } else {
                         btnPositive.setText(neutralButton);
-                        btnPositive.setOnClickListener(neutralButtonListener);
+                        btnPositive.setOnClickListener(this);
                     }
                 } else {
                     btnNegative.setText(neutralButton);
-                    btnNegative.setOnClickListener(neutralButtonListener);
+                    btnNegative.setOnClickListener(this);
                     btnPositive.setText(positiveButton);
-                    btnPositive.setOnClickListener(positiveButtonListener);
+                    btnPositive.setOnClickListener(this);
                 }
                 break;
             case 3:
                 btnNegative.setText(negativeButton);
-                btnNegative.setOnClickListener(negativeButtonListener);
+                btnNegative.setOnClickListener(this);
                 btnNeutral.setText(neutralButton);
-                btnNeutral.setOnClickListener(neutralButtonListener);
+                btnNeutral.setOnClickListener(this);
                 btnPositive.setText(positiveButton);
-                btnPositive.setOnClickListener(positiveButtonListener);
+                btnPositive.setOnClickListener(this);
                 break;
         }
     }
 
+    @Override
+    public abstract void onClick(View view);
 }
