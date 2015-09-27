@@ -22,14 +22,13 @@ import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
  * а также цвет фона, размеры, цвета и стили шрифтов.
  */
 public abstract class BaseDialogFragment extends DialogFragment implements View.OnClickListener {
-    protected View view, lineBtnFirst, lineBtnSecond;
+    protected View view, lineBtnFirst, lineBtnSecond, lineBtnHorizontal;
     protected ViewGroup layTitle;
     View layButtons;
     protected View dividerTitle;
     protected Button btnNegative, btnNeutral, btnPositive;
     protected TextView tvTitle;
     private String title, negativeButton, positiveButton, neutralButton;
-    private View.OnClickListener negativeButtonListener, positiveButtonListener, neutralButtonListener;
     protected int buttonCount;
     protected int titleColor;
     protected float titleSize;
@@ -55,11 +54,12 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
      * layTitle - ViewGroup, который включает заглавие и разделительную линию.
      * tvTitle - TextView с тесктом заглавия.
      * dividerTitle - View, разделительная титульная полоса.
-     * lineBtnFirst, lineBtnSecond - горизонтальные разделительные полосы между ккнопками.
+     * lineBtnHorizontal - горизонтальная отделяющая кнопки полоса.
+     * lineBtnFirst, lineBtnSecond - вертикальные разделительные полосы между кнопками.
      * layButtons - ViewGroup, который включает кнопки и разделительные линии.
      * btnNegative, btnNeutral, btnPositive - Button, соответствующие view кнопок.
      *
-     * @param savedInstanceState Bundle с сохраненнім состоянием
+     * @param savedInstanceState Bundle с сохраненным состоянием
      * @return Объект диалогового окна
      */
     @Override
@@ -196,19 +196,37 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
     }
 
     /**
-     * Установка текста и слушателя Negative кнопки.
-     * Если не вызывать этот метод, то диалоговое окно не будет включать Negative кнопку.
-     *
-     * @param titleButton текст кнопки
+     * Метод для определения какие кнопки установлены. Установливает buttonCount.
+     * Соответствует цифрам в двоичном формате. Ноль - кнопка не установлена, единица - установлена.
+     * Первая цыфра - negativeButton, вторая - neutralButton, третья - positiveButton.
+     * Примеры: 000 - ниодна кнопка не установлена, buttonCount = 0;
+     *          001 - установлена только positiveButton, buttonCount = 1;
+     *          110 - установлены negativeButton и neutralButton buttonCount = 6.
      */
-    public void setNegativeButton(String titleButton) {
-        this.negativeButton = titleButton;
-        if (positiveButton != null && neutralButton != null) {
-            buttonCount = 3;
-        } else if (positiveButton != null || neutralButton != null) {
-            buttonCount = 2;
-        } else {
+    private void defineCount(){
+        if(negativeButton == null && neutralButton == null && positiveButton == null){
+            buttonCount = 0;
+        }
+        if(negativeButton == null && neutralButton == null && positiveButton != null){
             buttonCount = 1;
+        }
+        if(negativeButton == null && neutralButton != null && positiveButton == null){
+            buttonCount = 2;
+        }
+        if(negativeButton == null && neutralButton != null && positiveButton != null){
+            buttonCount = 3;
+        }
+        if(negativeButton != null && neutralButton == null && positiveButton == null){
+            buttonCount = 4;
+        }
+        if(negativeButton != null && neutralButton == null && positiveButton != null){
+            buttonCount = 5;
+        }
+        if(negativeButton != null && neutralButton != null && positiveButton == null){
+            buttonCount = 6;
+        }
+        if(negativeButton != null && neutralButton != null && positiveButton != null){
+            buttonCount = 7;
         }
     }
 
@@ -220,13 +238,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
      */
     public void setPositiveButton(String titleButton) {
         this.positiveButton = titleButton;
-        if (negativeButton != null && neutralButton != null) {
-            buttonCount = 3;
-        } else if (negativeButton != null || neutralButton != null) {
-            buttonCount = 2;
-        } else {
-            buttonCount = 1;
-        }
+        defineCount();
     }
 
     /**
@@ -237,23 +249,18 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
      */
     public void setNeutralButton(String titleButton) {
         this.neutralButton = titleButton;
-        if (negativeButton != null && positiveButton != null) {
-            buttonCount = 3;
-        } else if (negativeButton != null || positiveButton != null) {
-            buttonCount = 2;
-        } else {
-            buttonCount = 1;
-        }
+        defineCount();
     }
 
     /**
-     * Метод для установки слушателя нажатия кнопок в диалоговом окне
-     * @param listener слушатель
-     * @param tag идентификатор диалогового окна
+     * Установка текста и слушателя Negative кнопки.
+     * Если не вызывать этот метод, то диалоговое окно не будет включать Negative кнопку.
+     *
+     * @param titleButton текст кнопки
      */
-    public void setOnClickListener(NeirDialogInterface.OnClickListener listener, String tag){
-        onClickListener = listener;
-        this.tag = tag;
+    public void setNegativeButton(String titleButton) {
+        this.negativeButton = titleButton;
+        defineCount();
     }
 
     /**
@@ -284,6 +291,17 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
     }
 
     /**
+     * Метод для установки слушателя нажатия кнопок в диалоговом окне
+     *
+     * @param listener слушатель
+     * @param tag      идентификатор диалогового окна
+     */
+    public void setOnClickListener(NeirDialogInterface.OnClickListener listener, String tag) {
+        onClickListener = listener;
+        this.tag = tag;
+    }
+
+    /**
      * Метод проверки, какой фон устанавливать для диалогового окна.
      */
     protected void checkDialogBackground() {
@@ -299,75 +317,38 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
      * Если не установлены, то соответствующие view скрываются.
      */
     protected void checkButtons() {
-        //layButtons.setBackgroundColor(dividerButtonsColor);
-        if (buttonTextColor != 0) {
-            btnNegative.setTextColor(buttonTextColor);
-            btnNeutral.setTextColor(buttonTextColor);
-            btnPositive.setTextColor(buttonTextColor);
+        lineBtnHorizontal.setBackgroundColor(dividerButtonsColor);
+        lineBtnFirst.setBackgroundColor(dividerButtonsColor);
+        lineBtnSecond.setBackgroundColor(dividerButtonsColor);
+        if(buttonCount == 0){
+            layButtons.setVisibility(View.GONE);
+            return;
+        } else if(buttonCount == 1 || buttonCount == 2 || buttonCount == 4){
+            lineBtnFirst.setVisibility(View.GONE);
+            lineBtnSecond.setVisibility(View.GONE);
+        } else if(buttonCount == 3 || buttonCount == 5){
+            lineBtnFirst.setVisibility(View.GONE);
+        } else if(buttonCount == 6){
+            lineBtnSecond.setVisibility(View.GONE);
         }
-        if (buttonTextSize != 0) {
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
-            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
-        }
-        if (buttonTextTypeface != null && buttonTextStyle != null) {
-            btnNegative.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
-            btnNeutral.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
-            btnPositive.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
-        }
-        if (buttonSelectorId != 0) {
-            btnNegative.setBackgroundResource(buttonSelectorId);
-            btnNeutral.setBackgroundResource(buttonSelectorId);
-            btnPositive.setBackgroundResource(buttonSelectorId);
-        }
-        switch (buttonCount) {
-            case 0:
-                layButtons.setVisibility(View.GONE);
-                break;
-            case 1:
-                lineBtnFirst.setVisibility(View.GONE);
-                lineBtnSecond.setVisibility(View.GONE);
-                btnNegative.setVisibility(View.GONE);
-                btnPositive.setVisibility(View.GONE);
-                if (negativeButton != null) {
-                    btnNeutral.setText(negativeButton);
-                    btnNeutral.setOnClickListener(this);
-                } else if (positiveButton != null) {
-                    btnNeutral.setText(positiveButton);
-                    btnNeutral.setOnClickListener(this);
-                } else {
-                    btnNeutral.setText(neutralButton);
-                    btnNeutral.setOnClickListener(this);
-                }
-                break;
-            case 2:
-                btnNeutral.setVisibility(View.GONE);
-                lineBtnSecond.setVisibility(View.GONE);
-                if (negativeButton != null) {
-                    btnNegative.setText(negativeButton);
-                    btnNegative.setOnClickListener(this);
-                    if (positiveButton != null) {
-                        btnPositive.setText(positiveButton);
-                        btnPositive.setOnClickListener(this);
-                    } else {
-                        btnPositive.setText(neutralButton);
-                        btnPositive.setOnClickListener(this);
-                    }
-                } else {
-                    btnNegative.setText(neutralButton);
-                    btnNegative.setOnClickListener(this);
-                    btnPositive.setText(positiveButton);
-                    btnPositive.setOnClickListener(this);
-                }
-                break;
-            case 3:
-                btnNegative.setText(negativeButton);
-                btnNegative.setOnClickListener(this);
-                btnNeutral.setText(neutralButton);
-                btnNeutral.setOnClickListener(this);
-                btnPositive.setText(positiveButton);
-                btnPositive.setOnClickListener(this);
-                break;
+        seButtonParameters(positiveButton, btnPositive);
+        seButtonParameters(negativeButton, btnNegative);
+        seButtonParameters(neutralButton, btnNeutral);
+    }
+
+    /**
+     * Установка параметров кнопок если они не равны null или скрытие view кнопок в противном случае.
+     */
+    private void seButtonParameters(String title, Button button){
+        if(title == null){
+            button.setVisibility(View.GONE);
+        } else {
+            button.setTextColor(buttonTextColor);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+            button.setTypeface(buttonTextTypeface, buttonTextStyle.getValue());
+            button.setBackgroundResource(buttonSelectorId);
+            button.setText(title);
+            button.setOnClickListener(this);
         }
     }
 

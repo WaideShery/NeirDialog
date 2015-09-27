@@ -7,4 +7,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_multi_choice_dialog">MultiChoiceDialogActivity</string>
     <string name="title_activity_single_choice_dialog">SingleChoiceDialogActivity</string>
+    <string name="title_activity_edit_text_dialog">EditTextDialogActivity</string>
 </resources>

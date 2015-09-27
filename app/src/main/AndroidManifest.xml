@@ -32,6 +32,10 @@
             android:name=".SingleChoiceDialogActivity"
             android:label="@string/title_activity_single_choice_dialog" >
         </activity>
+        <activity
+            android:name=".EditTextDialogActivity"
+            android:label="@string/title_activity_edit_text_dialog" >
+        </activity>
     </application>
 
 </manifest>

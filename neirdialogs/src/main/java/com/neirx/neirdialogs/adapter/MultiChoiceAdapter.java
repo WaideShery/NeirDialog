@@ -3,20 +3,20 @@ package com.neirx.neirdialogs.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.dialog.SelectDialogFragment;
+import com.neirx.neirdialogs.Statical;
+import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
 import com.neirx.neirdialogs.dialog.TextStyle;
 import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,34 +26,57 @@ public class MultiChoiceAdapter extends BaseAdapter {
     private LayoutInflater lInflater;
     private Context context;
     //private CheckBox checkBox;
-    private List<ChoiceItem> listItems;
+    private List<String> listItems;
+    List<Integer> listCheckedItemsPos;
     private int textColor;
     private float textSize;
     private TextStyle textStyle;
     private Typeface textTypeface;
     @DrawableRes
     private int flagSelector, bgSelector;
-    private SelectDialogFragment.SelectItemListener listener = null;
-    private int requestCode = -1;
-    private boolean[] arrayItemsChecked;
 
-    public MultiChoiceAdapter(List<ChoiceItem> listItems, Context context, int textColor, float textSize,
-                              TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector,
-                              SelectDialogFragment.SelectItemListener listener, int requestCode) {
+    public Integer[] getCheckedItemsPos(){
+        if(listCheckedItemsPos == null){
+            return null;
+        }
+        return listCheckedItemsPos.toArray(new Integer[listCheckedItemsPos.size()]);
+    }
+
+    public MultiChoiceAdapter(List<String> listItems, int[] checkedItemsPos, Context context, int textColor, float textSize,
+                              TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector) {
         this.listItems = listItems;
+        this.listCheckedItemsPos = new ArrayList<>();
+        if (checkedItemsPos != null) {
+            addToCheckedList(checkedItemsPos);
+        }
         this.context = context;
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         this.textColor = textColor;
         this.textSize = textSize;
         this.textStyle = textStyle;
         this.textTypeface = textTypeface;
         this.flagSelector = flagSelector;
         this.bgSelector = bgSelector;
-        this.listener = listener;
-        this.requestCode = requestCode;
-        arrayItemsChecked = new boolean[listItems.size()];
-        for (int i = 0; i < listItems.size(); i++) {
-            arrayItemsChecked[i] = listItems.get(i).isChecked();
+    }
+
+    private void addToCheckedList(int[] checkedItemsPos) {
+        for (int item : checkedItemsPos) {
+            if (!listCheckedItemsPos.contains(item)) {
+                listCheckedItemsPos.add(item);
+            }
+        }
+    }
+
+    private void addToCheckedList(int itemPos) {
+        if (!listCheckedItemsPos.contains(itemPos)) {
+            listCheckedItemsPos.add(itemPos);
+        }
+    }
+
+    private void removeFromCheckedList(Integer itemPos) {
+        if (listCheckedItemsPos.contains(itemPos)) {
+            listCheckedItemsPos.remove(itemPos);
         }
     }
 
@@ -79,9 +102,8 @@ public class MultiChoiceAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.adapter_multichoice, parent, false);
         }
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-        final ChoiceItem item = listItems.get(position);
-        checkBox.setText(item.getTitle());
 
+        checkBox.setText(listItems.get(position));
         checkBox.setTextColor(textColor);
         checkBox.setTextSize(textSize);
         checkBox.setTypeface(textTypeface, textStyle.getValue());
@@ -90,13 +112,16 @@ public class MultiChoiceAdapter extends BaseAdapter {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrayItemsChecked[position] = checkBox.isChecked();
-                if (listener != null) {
-                    listener.onFinishSelectDialog(requestCode, arrayItemsChecked);
+                Log.d(Statical.TAG, "" + position);
+                if (checkBox.isChecked()) {
+                    addToCheckedList(position);
+                } else {
+                    removeFromCheckedList(position);
                 }
+
             }
         });
-        checkBox.setChecked(item.isChecked());
+        checkBox.setChecked(listCheckedItemsPos.contains(position));
         return view;
     }
 }

@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.dialog.SelectDialogFragment;
+import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
 import com.neirx.neirdialogs.dialog.TextStyle;
 import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
@@ -18,28 +18,28 @@ import java.util.List;
 
 /**
  * Created by Waide Shery on 25.07.2015.
+ *
  */
 public class SingleChoiceAdapter extends BaseAdapter {
     private LayoutInflater lInflater;
     private RadioButton radioButton;
     private Context context;
-    private List<ChoiceItem> listItems;
+    private List<String> listItems;
+    private int checkedItemPos;
     private int textColor;
     private float textSize;
     private TextStyle textStyle;
     private Typeface textTypeface;
     @DrawableRes
     private int flagSelector, bgSelector;
-    private SelectDialogFragment.SelectItemListener listener = null;
-    private int requestCode = -1;
-    int selectedPosition = 0;
 
-    public SingleChoiceAdapter(List<ChoiceItem> listItems, Context context, int textColor, float textSize,
-                               TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector,
-                               SelectDialogFragment.SelectItemListener listener, int requestCode){
+    public SingleChoiceAdapter(List<String> listItems, int[] checkedItemsPos, Context context, int textColor, float textSize,
+                               TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector){
         this.listItems = listItems;
+        this.checkedItemPos = checkedItemsPos[0];
         this.context = context;
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         this.textColor = textColor;
         this.textSize = textSize;
         this.textStyle = textStyle;
@@ -47,13 +47,10 @@ public class SingleChoiceAdapter extends BaseAdapter {
         this.bgSelector = bgSelector;
         this.flagSelector = flagSelector;
         this.bgSelector = bgSelector;
-        this.listener = listener;
-        this.requestCode = requestCode;
-        for(int i=0; i<listItems.size(); i++){
-            if(listItems.get(i).isChecked()){
-                selectedPosition = i;
-            }
-        }
+    }
+
+    public int getCheckedItemPos() {
+        return checkedItemPos;
     }
 
     @Override
@@ -78,9 +75,8 @@ public class SingleChoiceAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.adapter_singlechoice, parent, false);
         }
         radioButton = (RadioButton) view.findViewById(R.id.radioButton);
-        final ChoiceItem item = listItems.get(position);
-        radioButton.setText(item.getTitle());
-        radioButton.setChecked(selectedPosition == position);
+        radioButton.setText(listItems.get(position));
+        radioButton.setChecked(checkedItemPos == position);
         radioButton.setTextColor(textColor);
         radioButton.setTextSize(textSize);
         radioButton.setTypeface(textTypeface, textStyle.getValue());
@@ -95,12 +91,9 @@ public class SingleChoiceAdapter extends BaseAdapter {
                         arrayItemsChecked[i] = false;
                     } else {
                         arrayItemsChecked[i] = true;
-                        selectedPosition = i;
+                        checkedItemPos = i;
                     }
 
-                }
-                if (listener != null) {
-                    listener.onFinishSelectDialog(requestCode, arrayItemsChecked);
                 }
                 SingleChoiceAdapter.this.notifyDataSetChanged();
             }

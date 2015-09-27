@@ -46,6 +46,10 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
                 dialogFragment.show(manager, "btnWithTitle");
                 break;
             case R.id.btnWithoutTitle:
+                dialogFragment = dialogCreator.getListDialog();
+                dialogFragment.setItems(new String[]{"Первый", "Второй", "Третий", "Четвертый", "Пятый"});
+                dialogFragment.setOnItemClickListener(this, "btnWithoutTitle");
+                dialogFragment.show(manager, "btnWithoutTitle");
                 break;
         }
     }
@@ -62,6 +66,12 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
                 break;
             case 2:
                 item = "Третий";
+                break;
+            case 3:
+                item = "Четвертый";
+                break;
+            case 4:
+                item = "Пятый";
                 break;
         }
         Toast.makeText(this, tag + "  " + item, Toast.LENGTH_SHORT).show();

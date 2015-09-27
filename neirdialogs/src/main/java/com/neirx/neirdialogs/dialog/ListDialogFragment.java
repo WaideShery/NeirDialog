@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -76,16 +77,18 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_list_dialog, null);
-
+        lineBtnHorizontal = view.findViewById(R.id.viewTop);
+        lineBtnFirst = view.findViewById(R.id.viewLeft);
+        lineBtnSecond = view.findViewById(R.id.viewRight);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        dividerTitle = view.findViewById(R.id.dividerTitle);
-        lineBtnFirst = view.findViewById(R.id.viewHorFirst);
-        lineBtnSecond = view.findViewById(R.id.viewHorSecond);
         layButtons = view.findViewById(R.id.layButtons);
         layButtons.setVisibility(View.GONE);
+        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        dividerTitle = view.findViewById(R.id.dividerTitle);
+
         lvChoice = (ListView) view.findViewById(R.id.lvChoice);
 
+        checkDialogBackground();
         checkTitle();
         checkList();
 
@@ -95,12 +98,29 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
         return builder.create();
     }
 
+    /**
+     * Переопределение метода нажия на кнопки. Не выполняет ничего, так как кнопки отсутствуют.
+     */
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
 
+    }
+
+    /**
+     * Метод обработки нажатий на пункты ListView.
+     */
     @Override
-    public void setOnClickListener(NeirDialogInterface.OnClickListener listener, String tag) {}
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        dismiss();
+        if(onItemClickListener == null){
+            return;
+        }
+        onItemClickListener.onItemClick(tag, i);
+    }
 
+    /**
+     * Метод для установки Listener'а на ListView.
+     */
     public  void setOnItemClickListener(NeirDialogInterface.OnItemClickListener listener, String tag){
         onItemClickListener = listener;
         this.tag = tag;
@@ -122,12 +142,4 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        dismiss();
-        if(onItemClickListener == null){
-            return;
-        }
-        onItemClickListener.onItemClick(tag, i);
-    }
 }

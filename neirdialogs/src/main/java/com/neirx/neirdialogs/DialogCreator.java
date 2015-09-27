@@ -7,9 +7,10 @@ import android.support.annotation.DrawableRes;
 import android.util.Log;
 
 import com.neirx.neirdialogs.dialog.BaseDialogFragment;
+import com.neirx.neirdialogs.dialog.EditTextDialogFragment;
 import com.neirx.neirdialogs.dialog.ListDialogFragment;
 import com.neirx.neirdialogs.dialog.MessageDialogFragment;
-import com.neirx.neirdialogs.dialog.SelectDialogFragment;
+import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
 import com.neirx.neirdialogs.dialog.TextStyle;
 import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
@@ -19,15 +20,20 @@ import java.util.List;
 public abstract class DialogCreator {
     protected enum DialogStyle {Holo, Material}
 
-    protected int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor,
-            buttonTextSize, dividerButtonsColor, backgroundDialogColor, messageColor,
-            selectItemTextColor;
-    protected float titleSize, messageSize, selectItemTextSize;
-    protected Typeface titleTypeface, buttonTextTypeface, messageTypeface, selectItemTextTypeface;
-    protected TextStyle titleStyle, buttonTextStyle, messageStyle, selectItemTextStyle;
+    protected int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor, buttonTextSize,
+            dividerButtonsColor, backgroundDialogColor, messageTextColor, listItemTextColor, editTextColor, hintTextColor;
+
+    protected float titleSize, messageTextSize, listItemTextSize, editTextSize;
+
+    protected Typeface titleTypeface, buttonTextTypeface, messageTextTypeface, listItemTextTypeface,
+            editTextTypeface;
+
+    protected TextStyle titleStyle, buttonTextStyle, messageTextStyle, listItemTextStyle, editTextStyle;
+
     protected Context context;
+
     @DrawableRes
-    protected int dividerTitleResId, buttonSelectorId, backgroundDialogResId, selectItemBackgroundSelector,
+    protected int dividerTitleResId, buttonSelectorId, backgroundDialogResId, listItemBackgroundSelector,
             singleFlagSelector, multiFlagSelector;
 
 
@@ -38,7 +44,7 @@ public abstract class DialogCreator {
         backgroundDialogResId = 0;
 
         titleColor = context.getResources().getColor(R.color.holo_blue);
-        titleSize = 20;
+        titleSize = 18;
         titleTypeface = Typeface.DEFAULT;
         titleStyle = TextStyle.NORMAL;
 
@@ -47,22 +53,30 @@ public abstract class DialogCreator {
         dividerTitleHeight = 2;
 
         buttonTextColor = context.getResources().getColor(R.color.holo_dark_text);
-        buttonTextSize = 6;
+        buttonTextSize = 12;
         buttonTextTypeface = Typeface.DEFAULT;
         buttonTextStyle = TextStyle.NORMAL;
         buttonSelectorId = R.drawable.holo_btn_selector;
         dividerButtonsColor = context.getResources().getColor(R.color.button_border);
 
-        messageColor = context.getResources().getColor(R.color.holo_dark_text);
-        messageSize = 16;
-        messageTypeface = Typeface.DEFAULT;
-        messageStyle = TextStyle.NORMAL;
+        messageTextColor = context.getResources().getColor(R.color.holo_dark_text);
+        messageTextSize = 16;
+        messageTextTypeface = Typeface.DEFAULT;
+        messageTextStyle = TextStyle.NORMAL;
 
-        selectItemTextColor = context.getResources().getColor(R.color.holo_dark_text);
-        selectItemTextSize = 14;
-        selectItemTextTypeface = Typeface.DEFAULT;
-        selectItemTextStyle = TextStyle.NORMAL;
-        selectItemBackgroundSelector = R.drawable.holo_list_item_selector;
+
+        editTextColor = context.getResources().getColor(R.color.holo_dark_edit_text);
+        editTextSize = 16;
+        editTextTypeface = Typeface.DEFAULT;
+        editTextStyle = TextStyle.NORMAL;
+        hintTextColor = context.getResources().getColor(R.color.holo_dark_edit_hint);
+
+        listItemTextColor = context.getResources().getColor(R.color.holo_dark_text);
+        listItemTextSize = 16;
+        listItemTextTypeface = Typeface.DEFAULT;
+        listItemTextStyle = TextStyle.NORMAL;
+        listItemBackgroundSelector = R.drawable.holo_list_item_selector;
+
         singleFlagSelector = R.drawable.holo_radiobtn_selector;
         multiFlagSelector = R.drawable.holo_checkbox_selector;
     }
@@ -70,16 +84,16 @@ public abstract class DialogCreator {
     public ListDialogFragment getListDialog() {
         ListDialogFragment dialog = new ListDialogFragment();
         setBaseProperties(dialog);
-        setSelectItemProperties(dialog);
+        setListItemProperties(dialog);
         return dialog;
     }
 
-    public SelectDialogFragment getSelectDialog(boolean isMultiChoice, List<ChoiceItem> items) {
-        SelectDialogFragment dialog = new SelectDialogFragment();
+
+    public ChoiceDialogFragment getChoiceDialog(boolean isMultiChoice) {
+        ChoiceDialogFragment dialog = new ChoiceDialogFragment();
         setBaseProperties(dialog);
-        setSelectItemProperties(dialog);
-        dialog.setItems(items);
-        dialog.setChoiceMode(isMultiChoice);
+        setListItemProperties(dialog);
+        dialog.setMultiChoiceMode(isMultiChoice);
         if(isMultiChoice){
             dialog.setFlagSelector(multiFlagSelector);
         } else {
@@ -100,17 +114,27 @@ public abstract class DialogCreator {
     public MessageDialogFragment getMessageDialog() {
         MessageDialogFragment dialog = new MessageDialogFragment();
         setBaseProperties(dialog);
-        dialog.setMessageColor(messageColor);
-        dialog.setMessageSize(messageSize);
-        dialog.setMessageTypeface(messageTypeface, messageStyle);
+        dialog.setMessageColor(messageTextColor);
+        dialog.setMessageSize(messageTextSize);
+        dialog.setMessageTypeface(messageTextTypeface, messageTextStyle);
         return dialog;
     }
 
-    private void setSelectItemProperties(ListDialogFragment dialog) {
-        dialog.setItemBackgroundSelector(selectItemBackgroundSelector);
-        dialog.setItemTextColor(selectItemTextColor);
-        dialog.setItemTextSize(selectItemTextSize);
-        dialog.setItemTextTypeface(selectItemTextTypeface, selectItemTextStyle);
+    public EditTextDialogFragment getEditTextDialog(){
+        EditTextDialogFragment dialog = new EditTextDialogFragment();
+        setBaseProperties(dialog);
+        dialog.setEditTextSize(editTextSize);
+        dialog.setEditTextColor(editTextColor);
+        dialog.setEditTextTypeface(editTextTypeface, editTextStyle);
+        dialog.setHintTextColor(hintTextColor);
+        return dialog;
+    }
+
+    private void setListItemProperties(ListDialogFragment dialog) {
+        dialog.setItemBackgroundSelector(listItemBackgroundSelector);
+        dialog.setItemTextColor(listItemTextColor);
+        dialog.setItemTextSize(listItemTextSize);
+        dialog.setItemTextTypeface(listItemTextTypeface, listItemTextStyle);
     }
 
     private void setBaseProperties(BaseDialogFragment dialog) {

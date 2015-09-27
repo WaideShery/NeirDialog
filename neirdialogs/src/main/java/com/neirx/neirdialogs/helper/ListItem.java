@@ -4,6 +4,7 @@ import com.neirx.neirdialogs.interfaces.ChoiceItem;
 
 /**
  * Created by Waide Shery on 25.07.2015.
+ *
  */
 public class ListItem implements ChoiceItem {
     String title;
