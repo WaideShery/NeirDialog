@@ -10,9 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
-import com.neirx.neirdialogs.dialog.TextStyle;
-import com.neirx.neirdialogs.interfaces.ChoiceItem;
+import com.neirx.neirdialogs.enums.TextStyle;
 
 import java.util.List;
 

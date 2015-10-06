@@ -2,15 +2,15 @@ package com.neirx.neirdialogs.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.dialog.TextStyle;
+import com.neirx.neirdialogs.enums.TextStyle;
 
 /**
  * Created by Waide Shery on 25.07.2015.
@@ -19,15 +19,17 @@ import com.neirx.neirdialogs.dialog.TextStyle;
 public class ListChoiceAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     TextView textView;
-    final private String[] items;
-    final private int itemTextColor;
-    final private float itemTextSize;
-    final private TextStyle itemTextStyle;
-    final private Typeface itemTextTypeface;
-    final private int itemBackgroundSelector;
+    private String[] items;
+    private int itemTextColor;
+    private float itemTextSize;
+    private TextStyle itemTextStyle;
+    private Typeface itemTextTypeface;
+    private int itemBackgroundSelector;
+    private int itemTextGravity;
+    protected int itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom;
 
     public ListChoiceAdapter(String[] items, Context context, int itemTextColor, float itemTextSize,
-            TextStyle itemTextStyle, Typeface itemTextTypeface, int itemBackgroundSelector){
+            TextStyle itemTextStyle, Typeface itemTextTypeface, int itemTextGravity, int itemBackgroundSelector){
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
         this.itemTextColor = itemTextColor;
@@ -35,6 +37,14 @@ public class ListChoiceAdapter extends BaseAdapter {
         this.itemTextStyle = itemTextStyle;
         this.itemTextTypeface = itemTextTypeface;
         this.itemBackgroundSelector = itemBackgroundSelector;
+        this.itemTextGravity = itemTextGravity;
+    }
+
+    public void setItemTextPadding(int start, int top, int end, int bottom){
+        itemPaddingStart = start;
+        itemPaddingTop = top;
+        itemPaddingEnd = end;
+        itemPaddingBottom = bottom;
     }
 
     @Override
@@ -61,11 +71,22 @@ public class ListChoiceAdapter extends BaseAdapter {
         textView = (TextView) view.findViewById(R.id.textView);
 
         textView.setText(items[position]);
-        textView.setTextColor(itemTextColor);
-        textView.setTextSize(itemTextSize);
-        textView.setTypeface(itemTextTypeface, itemTextStyle.getValue());
+        if(itemTextColor > -1) textView.setTextColor(itemTextColor);
+        if(itemTextSize > 0) textView.setTextSize(itemTextSize);
+        if(itemTextGravity > -1) textView.setGravity(itemTextGravity);
+        if(itemTextTypeface != null && itemTextStyle != null) textView.setTypeface(itemTextTypeface, itemTextStyle.getValue());
+        else if(itemTextTypeface != null) textView.setTypeface(itemTextTypeface);
+        else if(itemTextStyle != null) textView.setTypeface(Typeface.DEFAULT, itemTextStyle.getValue());
 
-        view.setBackgroundResource(itemBackgroundSelector);
+        if(itemPaddingStart > -1) {
+            if (Build.VERSION.SDK_INT >= 16) {
+                textView.setPaddingRelative(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
+            } else {
+                textView.setPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
+            }
+        }
+
+        if(itemBackgroundSelector > -1) view.setBackgroundResource(itemBackgroundSelector);
         return view;
     }
 }

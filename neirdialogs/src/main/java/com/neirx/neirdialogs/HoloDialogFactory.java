@@ -6,18 +6,20 @@ import android.graphics.Typeface;
 import android.support.annotation.DrawableRes;
 import android.util.Log;
 
-import com.neirx.neirdialogs.dialog.BaseDialogFragment;
+import com.neirx.neirdialogs.dialog.HoloRootDialog;
 import com.neirx.neirdialogs.dialog.EditTextDialogFragment;
-import com.neirx.neirdialogs.dialog.ListDialogFragment;
-import com.neirx.neirdialogs.dialog.MessageDialogFragment;
+import com.neirx.neirdialogs.dialog.HoloListDialog;
+import com.neirx.neirdialogs.dialog.HoloMessageDialog;
 import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
-import com.neirx.neirdialogs.dialog.TextStyle;
-import com.neirx.neirdialogs.interfaces.ChoiceItem;
+import com.neirx.neirdialogs.enums.TextStyle;
+import com.neirx.neirdialogs.interfaces.DialogFactory;
+import com.neirx.neirdialogs.interfaces.ListDialog;
+import com.neirx.neirdialogs.interfaces.MessageDialog;
+import com.neirx.neirdialogs.interfaces.MultiChoiceDialog;
+import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
 
-import java.util.List;
 
-
-public abstract class DialogCreator {
+public class HoloDialogFactory implements DialogFactory {
     protected enum DialogStyle {Holo, Material}
 
     protected int titleColor, dividerTitleColor, dividerTitleHeight, buttonTextColor, buttonTextSize,
@@ -37,7 +39,7 @@ public abstract class DialogCreator {
             singleFlagSelector, multiFlagSelector;
 
 
-    protected DialogCreator(Context context) {
+    protected HoloDialogFactory(Context context) {
         this.context = context;
 
         backgroundDialogColor = context.getResources().getColor(R.color.dialog_background);
@@ -81,8 +83,8 @@ public abstract class DialogCreator {
         multiFlagSelector = R.drawable.holo_checkbox_selector;
     }
 
-    public ListDialogFragment getListDialog() {
-        ListDialogFragment dialog = new ListDialogFragment();
+    public ListDialog createListDialog() {
+        HoloListDialog dialog = new HoloListDialog();
         setBaseProperties(dialog);
         setListItemProperties(dialog);
         return dialog;
@@ -103,16 +105,16 @@ public abstract class DialogCreator {
         return dialog;
     }
 
-    public void getDatePickerDialog() {
-
+    public SingleChoiceDialog createSingleChoiceDialog() {
+        return null;
     }
 
-    public void getTimePickerDialog() {
-
+    public MultiChoiceDialog createMultiChoiceDialog() {
+        return  null;
     }
 
-    public MessageDialogFragment getMessageDialog() {
-        MessageDialogFragment dialog = new MessageDialogFragment();
+    public MessageDialog createMessageDialog() {
+        HoloMessageDialog dialog = new HoloMessageDialog();
         setBaseProperties(dialog);
         dialog.setMessageColor(messageTextColor);
         dialog.setMessageSize(messageTextSize);
@@ -130,14 +132,14 @@ public abstract class DialogCreator {
         return dialog;
     }
 
-    private void setListItemProperties(ListDialogFragment dialog) {
+    private void setListItemProperties(HoloListDialog dialog) {
         dialog.setItemBackgroundSelector(listItemBackgroundSelector);
         dialog.setItemTextColor(listItemTextColor);
         dialog.setItemTextSize(listItemTextSize);
         dialog.setItemTextTypeface(listItemTextTypeface, listItemTextStyle);
     }
 
-    private void setBaseProperties(BaseDialogFragment dialog) {
+    private void setBaseProperties(HoloRootDialog dialog) {
         Log.d(Statical.TAG, "setBaseProperties");
         dialog.setDialogBackgroundColor(backgroundDialogColor);
         dialog.setDialogBackground(backgroundDialogResId);
@@ -148,7 +150,7 @@ public abstract class DialogCreator {
 
         dialog.setDividerTitleColor(dividerTitleColor);
         dialog.setDividerTitleBackground(dividerTitleResId);
-        dialog.setDividerTitleHeight(dividerTitleHeight);
+        dialog.setDividerTitleWidth(dividerTitleHeight);
 
         dialog.setButtonsTextColor(buttonTextColor);
         dialog.setButtonsTextSize(buttonTextSize);

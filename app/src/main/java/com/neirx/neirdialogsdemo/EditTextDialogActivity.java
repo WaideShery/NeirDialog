@@ -1,20 +1,14 @@
 package com.neirx.neirdialogsdemo;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.neirx.neirdialogs.dialog.EditTextDialogFragment;
-import com.neirx.neirdialogs.dialog.MessageDialogFragment;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
-import com.neirx.neirdialogsdemo.R;
 
 public class EditTextDialogActivity extends Activity implements View.OnClickListener,
         NeirDialogInterface.OnClickListener {

@@ -8,16 +8,18 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.enums.TextStyle;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 
-public class EditTextDialogFragment extends BaseDialogFragment {
+public class EditTextDialogFragment extends HoloBaseDialog {
     protected EditText editText;
     protected String editTextMessage;
     protected int editTextColor;
@@ -97,19 +99,21 @@ public class EditTextDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_edittext_dialog, null);
-        lineBtnHorizontal = view.findViewById(R.id.viewTop);
-        lineBtnFirst = view.findViewById(R.id.viewLeft);
-        lineBtnSecond = view.findViewById(R.id.viewRight);
+        lineBtnTopHor = view.findViewById(R.id.viewTop);
+        lineBtnLeftVer = view.findViewById(R.id.viewLeft);
+        lineBtnRightVer = view.findViewById(R.id.viewRight);
         btnNegative = (Button) view.findViewById(R.id.btnNegative);
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
-        layButtons = view.findViewById(R.id.layButtons);
+        layButtons = (ViewGroup) view.findViewById(R.id.layButtons);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         dividerTitle = view.findViewById(R.id.dividerTitle);
+
+        //Специфичные ресурсы для диалога
         editText = (EditText) view.findViewById(R.id.editText);
 
-        checkDialogBackground();
+        checkRootView();
         checkTitle();
         checkButtons();
         checkEditText();

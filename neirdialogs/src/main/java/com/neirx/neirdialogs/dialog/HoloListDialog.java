@@ -8,28 +8,36 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
 import com.neirx.neirdialogs.adapter.ListChoiceAdapter;
+import com.neirx.neirdialogs.enums.TextStyle;
+import com.neirx.neirdialogs.interfaces.ListDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 
-public class ListDialogFragment extends BaseDialogFragment implements AdapterView.OnItemClickListener {
+public class HoloListDialog extends HoloRootDialog implements ListDialog, AdapterView.OnItemClickListener {
     protected ListView lvChoice;
     protected String[] items;
     protected int itemTextColor;
     protected float itemTextSize;
     protected TextStyle itemTextStyle;
     protected Typeface itemTextTypeface;
+    protected int itemTextGravity;
     protected int itemBackgroundSelector;
     protected NeirDialogInterface.OnItemClickListener onItemClickListener;
+    protected int itemPaddingStart = -1, itemPaddingTop = -1, itemPaddingEnd = -1, itemPaddingBottom = -1;
 
+    /**
+     * Установка пунктов списка.
+     * @param items массив строк с пунктами
+     */
     public void setItems(String[] items) {
         this.items = items;
     }
@@ -64,6 +72,30 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
     }
 
     /**
+     * Установка выравнивания текста пунктов списка.
+     *
+     * @param gravity выравнивание {@link android.view.Gravity}
+     */
+    public void setItemTextTypeface(int gravity) {
+        itemTextGravity = gravity;
+    }
+
+    /**
+     * Установка отступов пунктов списка в dp.
+     *
+     * @param start  начало
+     * @param top    верх
+     * @param end    конец
+     * @param bottom низ
+     */
+    public void setMessagePaddingDP(int start, int top, int end, int bottom) {
+        itemPaddingStart = start;
+        itemPaddingTop = top;
+        itemPaddingEnd = end;
+        itemPaddingBottom = bottom;
+    }
+
+    /**
      * Установка селектора фона пунктов списка.
      *
      * @param itemBackgroundSelector селектор фона пунктов списка.
@@ -77,18 +109,13 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_list_dialog, null);
-        lineBtnHorizontal = view.findViewById(R.id.viewTop);
-        lineBtnFirst = view.findViewById(R.id.viewLeft);
-        lineBtnSecond = view.findViewById(R.id.viewRight);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
-        layButtons = view.findViewById(R.id.layButtons);
-        layButtons.setVisibility(View.GONE);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         dividerTitle = view.findViewById(R.id.dividerTitle);
 
         lvChoice = (ListView) view.findViewById(R.id.lvChoice);
 
-        checkDialogBackground();
+        checkRootView();
         checkTitle();
         checkList();
 
@@ -126,14 +153,18 @@ public class ListDialogFragment extends BaseDialogFragment implements AdapterVie
         this.tag = tag;
     }
 
+    /**
+     * Установка параметров пусктов списка.
+     */
     protected void checkList() {
         boolean noItems = false;
         if(items == null){
             items = new String[]{""};
             noItems = true;
         }
-        BaseAdapter adapter = new ListChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
-                itemTextTypeface, itemBackgroundSelector);
+        ListChoiceAdapter adapter = new ListChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
+                itemTextTypeface, itemTextGravity, itemBackgroundSelector);
+        adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
         lvChoice.setAdapter(adapter);
         if(noItems){
             lvChoice.setClickable(false);

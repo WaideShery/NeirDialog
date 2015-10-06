@@ -1,14 +1,13 @@
 package com.neirx.neirdialogsdemo;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialog.MessageDialogFragment;
+import com.neirx.neirdialogs.dialog.HoloMessageDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 public class MessageDialogActivity extends Activity implements View.OnClickListener,
@@ -43,7 +42,7 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        MessageDialogFragment dialogFragment;
+        HoloMessageDialog dialogFragment;
         switch (view.getId()){
             case R.id.btnTitleAllBtn:
                 dialogFragment = dialogCreator.getMessageDialog();

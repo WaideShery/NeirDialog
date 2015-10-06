@@ -18,13 +18,12 @@ import android.widget.Toast;
 import com.neirx.neirdialogs.R;
 import com.neirx.neirdialogs.adapter.MultiChoiceAdapter;
 import com.neirx.neirdialogs.adapter.SingleChoiceAdapter;
-import com.neirx.neirdialogs.interfaces.ChoiceItem;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 import java.util.List;
 
 
-public class ChoiceDialogFragment extends ListDialogFragment {
+public class ChoiceDialogFragment extends HoloListDialog {
     protected ListView lvChoice;
     protected List<String> items;
     protected boolean isMultiChoice;
@@ -52,7 +51,7 @@ public class ChoiceDialogFragment extends ListDialogFragment {
     /**
      * Установка списка для адаптера ListView.
      *
-     * @param items коллекция объектов имплементирующих интерфейс ChoiceItem.
+     * @param items коллекция объектов имплементирующих интерфейс.
      */
     public void setItems(List<String> items, int... checkedItemsPos) {
         this.items = items;
@@ -74,9 +73,9 @@ public class ChoiceDialogFragment extends ListDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_list_dialog, null);
-        lineBtnHorizontal = view.findViewById(R.id.viewTop);
-        lineBtnFirst = view.findViewById(R.id.viewLeft);
-        lineBtnSecond = view.findViewById(R.id.viewRight);
+        lineBtnTopHor = view.findViewById(R.id.viewTop);
+        lineBtnLeftVer = view.findViewById(R.id.viewLeft);
+        lineBtnRightVer = view.findViewById(R.id.viewRight);
         btnNegative = (Button) view.findViewById(R.id.btnNegative);
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);

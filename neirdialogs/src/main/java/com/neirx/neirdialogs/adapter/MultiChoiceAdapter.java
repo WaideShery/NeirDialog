@@ -12,9 +12,7 @@ import android.widget.CheckBox;
 
 import com.neirx.neirdialogs.R;
 import com.neirx.neirdialogs.Statical;
-import com.neirx.neirdialogs.dialog.ChoiceDialogFragment;
-import com.neirx.neirdialogs.dialog.TextStyle;
-import com.neirx.neirdialogs.interfaces.ChoiceItem;
+import com.neirx.neirdialogs.enums.TextStyle;
 
 import java.util.ArrayList;
 import java.util.List;

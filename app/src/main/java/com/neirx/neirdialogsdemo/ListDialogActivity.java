@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialog.ListDialogFragment;
+import com.neirx.neirdialogs.dialog.HoloListDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 /**
@@ -36,7 +36,7 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        ListDialogFragment dialogFragment;
+        HoloListDialog dialogFragment;
         switch (view.getId()){
             case R.id.btnWithTitle:
                 dialogFragment = dialogCreator.getListDialog();

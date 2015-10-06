@@ -3,28 +3,35 @@ package com.neirx.neirdialogs.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.enums.TextStyle;
+import com.neirx.neirdialogs.interfaces.MessageDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 
-public class MessageDialogFragment extends BaseDialogFragment {
+public class HoloMessageDialog extends HoloBaseDialog implements MessageDialog {
     protected TextView tvMessage;
     protected ScrollView svMessage;
     protected String message;
-    protected int messageColor;
-    protected float messageSize;
+    protected int messageColor = -1;
+    protected float messageSize = 0;
     protected TextStyle messageStyle;
     protected Typeface messageTypeface;
+    protected int messageGravity = -1;
+    protected int messagePaddingStart = -1, messagePaddingTop = -1, messagePaddingEnd = -1, messagePaddingBottom = -1;
 
     /**
      * Установка текста сообщения диалогового окна.
@@ -36,55 +43,76 @@ public class MessageDialogFragment extends BaseDialogFragment {
         this.message = message;
     }
 
-
     /**
      * Установка цвета сообщения диалогового окна.
      *
-     * @param color ресурс цвета
+     * @param textColor  цвет текста
      */
-    public void setMessageColor(int color) {
-        messageColor = color;
+    public void setMessageColor(int textColor){
+        messageColor = textColor;
     }
 
     /**
-     * Установка размера шрифта сообщения диалогового окна.
+     * Установка размера сообщения диалогового окна.
      *
-     * @param sizeSp размер шрифта
+     * @param textSizeSP размер текста в sp
      */
-    public void setMessageSize(float sizeSp) {
-        messageSize = sizeSp;
+    public void setMessageSize(int textSizeSP){
+        messageSize = textSizeSP;
     }
 
     /**
-     * Установка шрифта и стиля отображения сообщения диалогового окна.
+     * Установка шрифта сообщения диалогового окна.
      *
-     * @param tf    шрифт
-     * @param style стиль текста
+     * @param typeface   шрифт
+     * @param textStyle  стиль
      */
-    public void setMessageTypeface(Typeface tf, TextStyle style) {
-        messageTypeface = tf;
-        messageStyle = style;
+    public void setMessageFont(Typeface typeface, TextStyle textStyle){
+        messageTypeface = typeface;
+        messageStyle = textStyle;
     }
 
+    /**
+     * Установка выравнивания сообщения диалогового окна.
+     * @param gravity выравнивание, смотреть {@link android.view.Gravity}
+     */
+    public void setMessageGravity(int gravity){
+        messageGravity = gravity;
+    }
+
+    /**
+     * Установка отступов сообщения диалогового окна в dp.
+     *
+     * @param start  начало
+     * @param top    верх
+     * @param end    конец
+     * @param bottom низ
+     */
+    public void setMessagePaddingDP(int start, int top, int end, int bottom) {
+        messagePaddingStart = start;
+        messagePaddingTop = top;
+        messagePaddingEnd = end;
+        messagePaddingBottom = bottom;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_message_dialog, null);
-        lineBtnHorizontal = view.findViewById(R.id.viewTop);
-        lineBtnFirst = view.findViewById(R.id.viewLeft);
-        lineBtnSecond = view.findViewById(R.id.viewRight);
+        lineBtnTopHor = view.findViewById(R.id.viewTop);
+        lineBtnLeftVer = view.findViewById(R.id.viewLeft);
+        lineBtnRightVer = view.findViewById(R.id.viewRight);
         btnNegative = (Button) view.findViewById(R.id.btnNegative);
         btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
         btnPositive = (Button) view.findViewById(R.id.btnPositive);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
-        layButtons = view.findViewById(R.id.layButtons);
+        layButtons = (ViewGroup) view.findViewById(R.id.layButtons);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         dividerTitle = view.findViewById(R.id.dividerTitle);
         tvMessage = (TextView) view.findViewById(R.id.tvMessage);
         svMessage = (ScrollView) view.findViewById(R.id.svMessage);
 
-        checkDialogBackground();
+        checkRootView();
         checkTitle();
         checkButtons();
         checkMessage();
@@ -94,6 +122,7 @@ public class MessageDialogFragment extends BaseDialogFragment {
         // Create the AlertDialog object and return it
         return builder.create();
     }
+
 
     /**
      * Метод нажатия на кнопки диалогового окна.
@@ -126,8 +155,21 @@ public class MessageDialogFragment extends BaseDialogFragment {
             message = "";
         }
         tvMessage.setText(message);
-        tvMessage.setTextColor(messageColor);
-        tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, messageSize);
-        tvMessage.setTypeface(messageTypeface, messageStyle.getValue());
+        if(messageColor > -1) tvMessage.setTextColor(messageColor);
+        if(messageSize > 0) tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, messageSize);
+
+        if(messageTypeface != null && messageStyle != null) tvMessage.setTypeface(messageTypeface, messageStyle.getValue());
+        else if(messageTypeface != null) tvMessage.setTypeface(messageTypeface);
+        else if(messageStyle != null) tvMessage.setTypeface(Typeface.DEFAULT, messageStyle.getValue());
+
+        if(messageGravity > -1) tvMessage.setGravity(messageGravity);
+
+        if(messagePaddingStart > -1) {
+            if (Build.VERSION.SDK_INT >= 16) {
+                tvMessage.setPaddingRelative(tvTitlePaddingStart, tvTitlePaddingTop, tvTitlePaddingEnd, tvTitlePaddingBottom);
+            } else {
+                tvMessage.setPadding(tvTitlePaddingStart, tvTitlePaddingTop, tvTitlePaddingEnd, tvTitlePaddingBottom);
+            }
+        }
     }
 }
