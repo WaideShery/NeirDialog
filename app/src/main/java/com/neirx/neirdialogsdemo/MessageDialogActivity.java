@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialog.HoloMessageDialog;
+import com.neirx.neirdialogs.dialogs.HoloMessageDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 public class MessageDialogActivity extends Activity implements View.OnClickListener,

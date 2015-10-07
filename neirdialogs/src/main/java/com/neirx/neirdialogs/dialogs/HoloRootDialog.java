@@ -1,4 +1,4 @@
-package com.neirx.neirdialogs.dialog;
+package com.neirx.neirdialogs.dialogs;
 
 
 import android.app.Dialog;
@@ -12,12 +12,10 @@ import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.neirx.neirdialogs.enums.TextStyle;
-import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 /**
  * Created by Waide Shery.
@@ -25,7 +23,7 @@ import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
  * Абстрактный класс диалогового окна в стиле Holo.
  * Включает в себя настройку заголовка и фона.
  */
-public abstract class HoloRootDialog extends DialogFragment implements View.OnClickListener {
+public abstract class HoloRootDialog extends DialogFragment {
     //Главное View диалогового окна
     protected View view;
 

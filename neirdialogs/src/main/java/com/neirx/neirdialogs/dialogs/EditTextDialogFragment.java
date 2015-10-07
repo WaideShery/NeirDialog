@@ -1,4 +1,4 @@
-package com.neirx.neirdialogs.dialog;
+package com.neirx.neirdialogs.dialogs;
 
 
 import android.app.AlertDialog;

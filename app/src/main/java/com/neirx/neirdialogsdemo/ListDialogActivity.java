@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialog.HoloListDialog;
+import com.neirx.neirdialogs.dialogs.HoloListDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 /**

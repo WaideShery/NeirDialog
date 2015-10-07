@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialog.EditTextDialogFragment;
+import com.neirx.neirdialogs.dialogs.EditTextDialogFragment;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 public class EditTextDialogActivity extends Activity implements View.OnClickListener,

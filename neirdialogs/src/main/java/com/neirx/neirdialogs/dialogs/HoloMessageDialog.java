@@ -1,9 +1,8 @@
-package com.neirx.neirdialogs.dialog;
+package com.neirx.neirdialogs.dialogs;
 
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;

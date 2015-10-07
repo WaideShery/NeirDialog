@@ -1,4 +1,4 @@
-package com.neirx.neirdialogs.adapter;
+package com.neirx.neirdialogs.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -16,7 +16,7 @@ import com.neirx.neirdialogs.enums.TextStyle;
  * Created by Waide Shery on 25.07.2015.
  *
  */
-public class ListChoiceAdapter extends BaseAdapter {
+public class ListAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     TextView textView;
     private String[] items;
@@ -28,10 +28,13 @@ public class ListChoiceAdapter extends BaseAdapter {
     private int itemTextGravity;
     protected int itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom;
 
-    public ListChoiceAdapter(String[] items, Context context, int itemTextColor, float itemTextSize,
-            TextStyle itemTextStyle, Typeface itemTextTypeface, int itemTextGravity, int itemBackgroundSelector){
+    public ListAdapter(String[] items, Context context){
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
+    }
+
+    public void setItemParam(int itemTextColor, float itemTextSize, TextStyle itemTextStyle,
+                             Typeface itemTextTypeface, int itemTextGravity, int itemBackgroundSelector){
         this.itemTextColor = itemTextColor;
         this.itemTextSize = itemTextSize;
         this.itemTextStyle = itemTextStyle;
@@ -71,6 +74,12 @@ public class ListChoiceAdapter extends BaseAdapter {
         textView = (TextView) view.findViewById(R.id.textView);
 
         textView.setText(items[position]);
+        setParam(textView);
+        if(itemBackgroundSelector > -1) view.setBackgroundResource(itemBackgroundSelector);
+        return view;
+    }
+
+    private void setParam(TextView textView){
         if(itemTextColor > -1) textView.setTextColor(itemTextColor);
         if(itemTextSize > 0) textView.setTextSize(itemTextSize);
         if(itemTextGravity > -1) textView.setGravity(itemTextGravity);
@@ -86,7 +95,5 @@ public class ListChoiceAdapter extends BaseAdapter {
             }
         }
 
-        if(itemBackgroundSelector > -1) view.setBackgroundResource(itemBackgroundSelector);
-        return view;
     }
 }

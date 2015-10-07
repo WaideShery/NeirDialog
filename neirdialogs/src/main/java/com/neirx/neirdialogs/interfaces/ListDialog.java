@@ -5,4 +5,6 @@ package com.neirx.neirdialogs.interfaces;
  *
  */
 public interface ListDialog {
+    void setItems(String[] items);
+    void setOnItemClickListener(NeirDialogInterface.OnItemClickListener listener, String tag);
 }

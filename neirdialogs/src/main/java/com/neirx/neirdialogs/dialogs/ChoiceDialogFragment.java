@@ -1,4 +1,4 @@
-package com.neirx.neirdialogs.dialog;
+package com.neirx.neirdialogs.dialogs;
 
 
 import android.app.AlertDialog;
@@ -8,23 +8,30 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.neirx.neirdialogs.R;
-import com.neirx.neirdialogs.adapter.ListChoiceAdapter;
+import com.neirx.neirdialogs.adapters.MultiChoiceAdapter;
+import com.neirx.neirdialogs.adapters.SingleChoiceAdapter;
 import com.neirx.neirdialogs.enums.TextStyle;
-import com.neirx.neirdialogs.interfaces.ListDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
+import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
+
+import java.util.List;
 
 
-public class HoloListDialog extends HoloRootDialog implements ListDialog, AdapterView.OnItemClickListener {
+public class ChoiceDialogFragment extends HoloBaseDialog  implements SingleChoiceDialog {
     protected ListView lvChoice;
-    protected String[] items;
+    protected List<String> items;
+    int[] checkedItemsPos;
+    protected int flagSelector;
+    protected int requestCode = -1;
+    BaseAdapter adapter;
     protected int itemTextColor;
     protected float itemTextSize;
     protected TextStyle itemTextStyle;
@@ -34,12 +41,16 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
     protected NeirDialogInterface.OnItemClickListener onItemClickListener;
     protected int itemPaddingStart = -1, itemPaddingTop = -1, itemPaddingEnd = -1, itemPaddingBottom = -1;
 
+
     /**
-     * Установка пунктов списка.
-     * @param items массив строк с пунктами
+     * Установка списка для адаптера ListView.
+     *
+     * @param items коллекция пунктов списка
+     * @param checkedItemsPos позиции выбранных элементов
      */
-    public void setItems(String[] items) {
+    public void setItems(List<String> items, int... checkedItemsPos) {
         this.items = items;
+        this.checkedItemsPos = checkedItemsPos;
     }
 
     /**
@@ -76,7 +87,7 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
      *
      * @param gravity выравнивание {@link android.view.Gravity}
      */
-    public void setItemTextTypeface(int gravity) {
+    public void setItemTextGravity(int gravity) {
         itemTextGravity = gravity;
     }
 
@@ -88,7 +99,7 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
      * @param end    конец
      * @param bottom низ
      */
-    public void setMessagePaddingDP(int start, int top, int end, int bottom) {
+    public void setItemTextPaddingDP(int start, int top, int end, int bottom) {
         itemPaddingStart = start;
         itemPaddingTop = top;
         itemPaddingEnd = end;
@@ -104,20 +115,36 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
         this.itemBackgroundSelector = itemBackgroundSelector;
     }
 
+    /**
+     *Установка ресурса флажка переключателя.
+     *
+     * @param flagSelector ресурс флажка
+     */
+    public void setFlagSelector(@DrawableRes int flagSelector){
+        this.flagSelector = flagSelector;
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.holo_list_dialog, null);
+        lineBtnTopHor = view.findViewById(R.id.viewTop);
+        lineBtnLeftVer = view.findViewById(R.id.viewLeft);
+        lineBtnRightVer = view.findViewById(R.id.viewRight);
+        btnNegative = (Button) view.findViewById(R.id.btnNegative);
+        btnNeutral = (Button) view.findViewById(R.id.btnNeutral);
+        btnPositive = (Button) view.findViewById(R.id.btnPositive);
         layTitle = (LinearLayout) view.findViewById(R.id.layTitle);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         dividerTitle = view.findViewById(R.id.dividerTitle);
-
         lvChoice = (ListView) view.findViewById(R.id.lvChoice);
+        layButtons = view.findViewById(R.id.layButtons);
 
         checkRootView();
         checkTitle();
-        checkList();
+        checkButtons();
+        checkChoice();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -125,52 +152,45 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
         return builder.create();
     }
 
-    /**
-     * Переопределение метода нажия на кнопки. Не выполняет ничего, так как кнопки отсутствуют.
-     */
     @Override
     public void onClick(View view) {
-
-    }
-
-    /**
-     * Метод обработки нажатий на пункты ListView.
-     */
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         dismiss();
-        if(onItemClickListener == null){
+        if (onClickListener == null) {
+            Toast.makeText(getActivity(),  "onClickListener == null", Toast.LENGTH_SHORT).show();
             return;
         }
-        onItemClickListener.onItemClick(tag, i);
-    }
-
-    /**
-     * Метод для установки Listener'а на ListView.
-     */
-    public  void setOnItemClickListener(NeirDialogInterface.OnItemClickListener listener, String tag){
-        onItemClickListener = listener;
-        this.tag = tag;
-    }
-
-    /**
-     * Установка параметров пусктов списка.
-     */
-    protected void checkList() {
-        boolean noItems = false;
-        if(items == null){
-            items = new String[]{""};
-            noItems = true;
+        int id = view.getId();
+        int buttonId = 0;
+        if (id == R.id.btnPositive) {
+            buttonId = NeirDialogInterface.BUTTON_POSITIVE;
+        } else if (id == R.id.btnNegative) {
+            buttonId = NeirDialogInterface.BUTTON_NEGATIVE;
+        } else if (id == R.id.btnNeutral) {
+            buttonId = NeirDialogInterface.BUTTON_NEUTRAL;
         }
-        ListChoiceAdapter adapter = new ListChoiceAdapter(items, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
-                itemTextTypeface, itemTextGravity, itemBackgroundSelector);
-        adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
-        lvChoice.setAdapter(adapter);
-        if(noItems){
-            lvChoice.setClickable(false);
+
+        if(isMultiChoice){
+            Integer[] arrCheckedPos = ((MultiChoiceAdapter)adapter).getCheckedItemsPos();
+            onClickListener.onClick(tag, buttonId, arrCheckedPos);
         } else {
-            lvChoice.setOnItemClickListener(this);
+            Integer checkedPos = ((SingleChoiceAdapter)adapter).getCheckedItemPos();
+            onClickListener.onClick(tag, buttonId, checkedPos);
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    protected void checkList() {
+        if(isMultiChoice) {
+            adapter = new MultiChoiceAdapter(items, checkedItemsPos, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
+                    itemTextTypeface, flagSelector, itemBackgroundSelector);
+        } else {
+            adapter = new SingleChoiceAdapter(items, checkedItemsPos, getActivity(), itemTextColor, itemTextSize, itemTextStyle,
+                    itemTextTypeface, flagSelector, itemBackgroundSelector);
+        }
+        lvChoice.setAdapter(adapter);
+    }
 }

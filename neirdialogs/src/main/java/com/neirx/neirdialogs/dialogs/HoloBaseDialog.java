@@ -1,4 +1,4 @@
-package com.neirx.neirdialogs.dialog;
+package com.neirx.neirdialogs.dialogs;
 
 import android.app.Dialog;
 import android.graphics.Typeface;
@@ -18,7 +18,7 @@ import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
  * Абстрактный базовый класс диалогового окна в стиле Holo.
  * Дополняется настройкой кнопок.
  */
-public abstract class HoloBaseDialog extends HoloRootDialog {
+public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnClickListener {
     //Стандартные ресурсы кнопок диалога
     protected ViewGroup layButtons;
     protected View lineBtnTopHor;
@@ -169,7 +169,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog {
      * @param typeface шрифт
      * @param style    стиль
      */
-    public void setTextButtonsBtnFont(Typeface typeface, TextStyle style){
+    public void setTextButtonsFont(Typeface typeface, TextStyle style){
         textTypefaceNegativeBtn = typeface;
         textTypefacePositiveBtn = typeface;
         textTypefaceNeutralBtn = typeface;
