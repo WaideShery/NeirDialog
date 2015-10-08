@@ -5,12 +5,14 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.neirx.neirdialogs.Statical;
 import com.neirx.neirdialogs.enums.TextStyle;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
@@ -380,6 +382,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * @param color цвет
      */
     public void setLeftDividerBtnColor(int color) {
+        Log.d(Statical.TAG, "setLeftDividerBtnColor" );
         leftDividerBtnColor = color;
         isLeftDividerBtnRes = false;
     }
@@ -534,6 +537,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
                 btnNeutral.setVisibility(View.GONE);
                 setNegativeBtnParam();
                 setPositiveBtnParam();
+                setRightLineParam();
                 setTopLineParam();
                 break;
             case 6:
@@ -573,6 +577,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     protected void setLeftLineParam(){
         if(isLeftDividerBtnRes)lineBtnLeftVer.setBackgroundResource(leftDividerBtnResId);
         else lineBtnLeftVer.setBackgroundColor(leftDividerBtnColor);
+        Log.d(Statical.TAG, "leftDividerBtnColor = " + leftDividerBtnColor);
         if(leftDividerBtnWidth > 0) {
             int width = (int) getDP(leftDividerBtnWidth);
             lineBtnLeftVer.setLayoutParams(new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -585,6 +590,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     protected void setRightLineParam(){
         if(isRightDividerBtnRes)lineBtnRightVer.setBackgroundResource(rightDividerBtnResId);
         else lineBtnRightVer.setBackgroundColor(rightDividerBtnColor);
+        Log.d(Statical.TAG, "rightDividerBtnColor = " + rightDividerBtnColor);
         if(rightDividerBtnWidth > 0) {
             int width = (int) getDP(rightDividerBtnWidth);
             lineBtnRightVer.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.MATCH_PARENT));

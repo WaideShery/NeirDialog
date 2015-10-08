@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.annotation.DrawableRes;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 
 import com.neirx.neirdialogs.dialogs.HoloBaseDialog;
 import com.neirx.neirdialogs.dialogs.HoloMultiChoiceDialog;
@@ -464,6 +463,7 @@ public class HoloDialogFactory implements DialogFactory {
     private TextStyle editTextStyle;
 
 
+
     protected HoloDialogFactory(Context context) {
         isBackgroundDialogRes = false;
         backgroundDialogColor = context.getResources().getColor(R.color.holo_dialog_background);
@@ -673,7 +673,7 @@ public class HoloDialogFactory implements DialogFactory {
     private void setViewProperties(HoloRootDialog dialog) {
         Log.d(Statical.TAG, "setBaseProperties");
         if (isBackgroundDialogRes) {
-            dialog.setDialogBackground(backgroundDialogResId);
+            dialog.setDialogBackgroundRes(backgroundDialogResId);
         } else {
             dialog.setDialogBackgroundColor(backgroundDialogColor);
         }
@@ -686,7 +686,7 @@ public class HoloDialogFactory implements DialogFactory {
      */
     private void setTitleProperties(HoloRootDialog dialog) {
         if (titleBgSet == TitleBgSet.RES) {
-            dialog.setDialogBackground(layTitleBackgroundResId);
+            dialog.setDialogBackgroundRes(layTitleBackgroundResId);
         } else if (titleBgSet == TitleBgSet.COLOR) {
             dialog.setDialogBackgroundColor(layTitleBackgroundColor);
         }

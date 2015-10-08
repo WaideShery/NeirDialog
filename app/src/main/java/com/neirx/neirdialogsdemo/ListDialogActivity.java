@@ -2,6 +2,7 @@ package com.neirx.neirdialogsdemo;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,7 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
                 dialogFragment.setTitle("Title");
                 dialogFragment.setItems(new String[]{"Первый", "Второй", "Третий"});
                 dialogFragment.setOnItemClickListener(this, "btnWithTitle");
+                ((HoloListDialog)dialogFragment).setDialogBackgroundColor(Color.GREEN);
                 dialogFragment.show(manager, "btnWithTitle");
                 break;
             case R.id.btnWithoutTitle:

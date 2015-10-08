@@ -35,13 +35,19 @@ public abstract class HoloRootDialog extends DialogFragment {
     protected View dividerTitle;
 
 
-    //Фон диалогового окна. Если фон не установлен, то его значение -1.
-    protected @DrawableRes int backgroundDialogResId = -1;
-    protected int backgroundDialogColor = -1;
+    /**
+     * Фон диалогового окна. Если isBackgroundDialogRes = true, то фоном устанавливается
+     * ресурс isBackgroundDialogRes. В противном случае - backgroundDialogColor.
+     */
+    protected @DrawableRes int backgroundDialogResId;
+    protected int backgroundDialogColor;
+    protected boolean isBackgroundDialogRes;
 
     //Фон layout'а заголовка. Если фон не установлен, то его значение -1.
-    protected @DrawableRes int layTitleBackgroundResId = -1;
-    protected int layTitleBackgroundColor = -1;
+    protected @DrawableRes int layTitleBackgroundResId;
+    protected int layTitleBackgroundColor;
+    protected enum TitleBgSet {NO, COLOR, RES}
+    protected TitleBgSet titleBgSet = TitleBgSet.NO;
 
     //Параметры текстового поля заголовка
     private String title;
@@ -56,9 +62,7 @@ public abstract class HoloRootDialog extends DialogFragment {
 
     //Параметры и фон разделяющей линии заголовка
     protected boolean isDividerTitleRes = false;
-    protected
-    @DrawableRes
-    int dividerTitleResId;
+    protected @DrawableRes int dividerTitleResId;
     protected int dividerTitleColor;
     protected float dividerTitleWidth = 0;
 
@@ -85,9 +89,9 @@ public abstract class HoloRootDialog extends DialogFragment {
      *
      * @param resId ресурс с фоном
      */
-    public void setDialogBackground(@DrawableRes int resId) {
+    public void setDialogBackgroundRes(@DrawableRes int resId) {
         backgroundDialogResId = resId;
-        backgroundDialogColor = -1;
+        isBackgroundDialogRes = true;
     }
 
     /**
@@ -98,7 +102,7 @@ public abstract class HoloRootDialog extends DialogFragment {
      */
     public void setDialogBackgroundColor(int color) {
         backgroundDialogColor = color;
-        backgroundDialogResId = -1;
+        isBackgroundDialogRes = false;
     }
 
     /**
@@ -119,7 +123,7 @@ public abstract class HoloRootDialog extends DialogFragment {
      */
     public void setLayTitleBackground(@DrawableRes int resId) {
         layTitleBackgroundResId = resId;
-        layTitleBackgroundColor = -1;
+        titleBgSet = TitleBgSet.RES;
     }
 
     /**
@@ -130,7 +134,7 @@ public abstract class HoloRootDialog extends DialogFragment {
      */
     public void setLayTitleBackgroundColor(int color) {
         layTitleBackgroundColor = color;
-        layTitleBackgroundResId = -1;
+        titleBgSet = TitleBgSet.COLOR;
     }
 
     /**
@@ -241,8 +245,8 @@ public abstract class HoloRootDialog extends DialogFragment {
      * Установка фона диалогового окна.
      */
     protected void checkRootView(){
-        if(backgroundDialogResId > 0) view.setBackgroundResource(backgroundDialogResId);
-        else if(backgroundDialogColor > 0) view.setBackgroundColor(backgroundDialogColor);
+        if(isBackgroundDialogRes) view.setBackgroundResource(backgroundDialogResId);
+        else view.setBackgroundColor(backgroundDialogColor);
     }
 
     /**
@@ -255,8 +259,8 @@ public abstract class HoloRootDialog extends DialogFragment {
             layTitle.setVisibility(View.GONE);
             return;
         }
-        if(layTitleBackgroundResId > -1) layTitle.setBackgroundResource(layTitleBackgroundResId);
-        else if(layTitleBackgroundColor > -1) layTitle.setBackgroundColor(layTitleBackgroundColor);
+        if(titleBgSet == TitleBgSet.RES) layTitle.setBackgroundResource(layTitleBackgroundResId);
+        else if(titleBgSet == TitleBgSet.COLOR) layTitle.setBackgroundColor(layTitleBackgroundColor);
 
         tvTitle.setText(title);
         tvTitle.setTextColor(titleColor);

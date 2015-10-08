@@ -20,6 +20,6 @@ public class CustomDialogFactory extends HoloDialogFactory {
 
     public CustomDialogFactory(Context context) {
         super(context);
-
+        setBackgroundDialogRes(R.drawable.fon);
     }
 }
