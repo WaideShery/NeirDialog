@@ -16,7 +16,7 @@ public class EditTextDialogActivity extends Activity implements View.OnClickList
             "Jackdaws love my big sphinx of quartz. " +
             "The five boxing wizards jump QUICKLY";
     Button btnTitleAllBtn, btnTitleTwoBtn, btnTitleOneBtn, btnNoTitleAndBtn;
-    CustomDialogCreator dialogCreator;
+    CustomDialogFactory dialogFactory;
     FragmentManager manager;
 
     @Override
@@ -28,7 +28,7 @@ public class EditTextDialogActivity extends Activity implements View.OnClickList
 
         btnTitleAllBtn.setOnClickListener(this);
 
-        dialogCreator = CustomDialogCreator.getInstance(this);
+        dialogFactory = CustomDialogFactory.getInstance(this);
         manager = getFragmentManager();
     }
 
@@ -37,7 +37,7 @@ public class EditTextDialogActivity extends Activity implements View.OnClickList
         EditTextDialogFragment dialogFragment;
         switch (view.getId()){
             case R.id.btnTitleAllBtn:
-                dialogFragment = dialogCreator.getEditTextDialog();
+                dialogFragment = dialogFactory.getEditTextDialog();
                 dialogFragment.setTitle("Title");
                 dialogFragment.setHintText("Напиши");
                 dialogFragment.setPositiveButton("Ok");

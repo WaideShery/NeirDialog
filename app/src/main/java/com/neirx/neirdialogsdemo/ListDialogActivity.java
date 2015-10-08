@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.neirx.neirdialogs.dialogs.HoloListDialog;
+import com.neirx.neirdialogs.interfaces.ListDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 /**
@@ -16,7 +17,7 @@ import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
  */
 public class ListDialogActivity extends Activity implements View.OnClickListener, NeirDialogInterface.OnItemClickListener {
     Button btnWithTitle, btnWithoutTitle;
-    private CustomDialogCreator dialogCreator;
+    private CustomDialogFactory dialogFactory;
     private FragmentManager manager;
 
     @Override
@@ -30,23 +31,23 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
         btnWithTitle.setOnClickListener(this);
         btnWithoutTitle.setOnClickListener(this);
 
-        dialogCreator = CustomDialogCreator.getInstance(this);
+        dialogFactory = CustomDialogFactory.getInstance(this);
         manager = getFragmentManager();
     }
 
     @Override
     public void onClick(View view) {
-        HoloListDialog dialogFragment;
+        ListDialog dialogFragment;
         switch (view.getId()){
             case R.id.btnWithTitle:
-                dialogFragment = dialogCreator.getListDialog();
+                dialogFragment = dialogFactory.createListDialog();
                 dialogFragment.setTitle("Title");
                 dialogFragment.setItems(new String[]{"Первый", "Второй", "Третий"});
                 dialogFragment.setOnItemClickListener(this, "btnWithTitle");
                 dialogFragment.show(manager, "btnWithTitle");
                 break;
             case R.id.btnWithoutTitle:
-                dialogFragment = dialogCreator.getListDialog();
+                dialogFragment = dialogFactory.createListDialog();
                 dialogFragment.setItems(new String[]{"Первый", "Второй", "Третий", "Четвертый", "Пятый"});
                 dialogFragment.setOnItemClickListener(this, "btnWithoutTitle");
                 dialogFragment.show(manager, "btnWithoutTitle");

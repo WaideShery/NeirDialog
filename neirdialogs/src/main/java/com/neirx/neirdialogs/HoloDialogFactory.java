@@ -6,13 +6,14 @@ import android.graphics.Typeface;
 import android.support.annotation.DrawableRes;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+
 import com.neirx.neirdialogs.dialogs.HoloBaseDialog;
 import com.neirx.neirdialogs.dialogs.HoloMultiChoiceDialog;
 import com.neirx.neirdialogs.dialogs.HoloRootDialog;
 import com.neirx.neirdialogs.dialogs.EditTextDialogFragment;
 import com.neirx.neirdialogs.dialogs.HoloListDialog;
 import com.neirx.neirdialogs.dialogs.HoloMessageDialog;
-import com.neirx.neirdialogs.dialogs.ChoiceDialogFragment;
 import com.neirx.neirdialogs.dialogs.HoloSingleChoiceDialog;
 import com.neirx.neirdialogs.enums.TextStyle;
 import com.neirx.neirdialogs.interfaces.DialogFactory;
@@ -25,191 +26,484 @@ import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
 public class HoloDialogFactory implements DialogFactory {
 
     /**
-     * Фон диалогового окна. Первым проверяется ресурс backgroundDialogResId, если он не равен -1, то устанавливается фоном.
-     * В противном случае, фоном ставиться цвет backgroundDialogColor.
+     * Фон диалогового окна. Если isBackgroundDialogRes = true, то фоном будет ресурс backgroundDialogResId.
+     * В противном случае, фоном ставится цвет backgroundDialogColor.
      */
-    protected @DrawableRes int backgroundDialogResId;
-    protected int backgroundDialogColor;
+    private
+    @DrawableRes
+    int backgroundDialogResId;
+    private int backgroundDialogColor;
+    private boolean isBackgroundDialogRes;
+
+    public void setBackgroundDialogRes(@DrawableRes int resId) {
+        this.backgroundDialogResId = resId;
+        isBackgroundDialogRes = true;
+    }
+
+    public void setBackgroundDialogColor(int color) {
+        this.backgroundDialogColor = color;
+        isBackgroundDialogRes = false;
+    }
 
     /**
      * Фон заголовка диалогового окна. Первым проверяется ресурс layTitleBackgroundResId, если он не равен -1, то устанавливается фоном.
      * В противном случае, фоном ставиться цвет layTitleBackgroundColor (если больше -1).
      */
-    protected @DrawableRes int layTitleBackgroundResId;
-    protected int layTitleBackgroundColor;
+    private
+    @DrawableRes
+    int layTitleBackgroundResId;
+    private int layTitleBackgroundColor;
+    private enum TitleBgSet {NO, COLOR, RES}
+    private TitleBgSet titleBgSet;
+    public void setTitleBackgroundRes(@DrawableRes int resId) {
+        this.layTitleBackgroundResId = resId;
+        titleBgSet = TitleBgSet.RES;
+    }
+    public void setTitleBackgroundColor(int color) {
+        this.layTitleBackgroundColor = color;
+        titleBgSet = TitleBgSet.COLOR;
+    }
 
     /**
      * Настройка шрифта заголовка. Размер шрифта в sp.
      */
-    protected int titleColor;
-    protected int titleSize;
-    protected Typeface titleTypeface;
-    protected TextStyle titleStyle;
+    private int titleColor;
+    private int titleSize;
+    private Typeface titleTypeface;
+    private TextStyle titleStyle;
+    public void setTitleColor(int textColor) {
+        this.titleColor = textColor;
+    }
+    public void setTitleSize(int textSizeSp) {
+        this.titleSize = textSizeSp;
+    }
+    public void setTitleTypeface(Typeface typeface, TextStyle textStyle) {
+        this.titleTypeface = typeface;
+        this.titleStyle = textStyle;
+    }
 
     /**
      * Выравнивание заголовка.
      */
-    protected int titleGravity;
+    private int titleGravity;
+    public void setTitleGravity(int textGravity) {
+        this.titleGravity = textGravity;
+    }
 
     /**
      * Отступы заголовка в dp.
      */
-    protected int tvTitlePaddingStart;
-    protected int tvTitlePaddingTop;
-    protected int tvTitlePaddingEnd;
-    protected int tvTitlePaddingBottom;
+    private int tvTitlePaddingStart;
+    private int tvTitlePaddingTop;
+    private int tvTitlePaddingEnd;
+    private int tvTitlePaddingBottom;
+    public void setTitlePadding(int startPaddingDp, int topPaddingDp, int endPaddingDp, int bottomPaddingDp) {
+        this.tvTitlePaddingStart = startPaddingDp;
+        this.tvTitlePaddingTop = topPaddingDp;
+        this.tvTitlePaddingEnd = endPaddingDp;
+        this.tvTitlePaddingBottom = bottomPaddingDp;
+    }
 
     /**
-     * Фон разделяющей линии заголовка. Первым проверяется ресурс dividerTitleResId, если он не равен -1, то устанавливается фоном.
+     * Фон разделяющей линии заголовка. Если isDividerTitleRes = true, то фоном устанавливается ресурс dividerTitleResId.
      * В противном случае, фоном ставиться цвет dividerTitleColor.
      */
-    protected @DrawableRes int dividerTitleResId;
-    protected int dividerTitleColor;
+    private
+    @DrawableRes
+    int dividerTitleResId;
+    private int dividerTitleColor;
+    private boolean isDividerTitleRes = false;
+    public void setDividerTitleRes(@DrawableRes int resId) {
+        this.dividerTitleResId = resId;
+        isDividerTitleRes = true;
+    }
+    public void setDividerTitleColor(int color) {
+        this.dividerTitleColor = color;
+        isDividerTitleRes = false;
+    }
+
 
     /**
      * Ширина разделяющей линии заголовка в dp.
      */
-    protected int dividerTitleWidth;
+    private int dividerTitleWidth;
+    public void setDividerTitleWidth(int widthDp) {
+        this.dividerTitleWidth = widthDp;
+    }
 
     /**
      * Ресурс селектора кнопок.
      */
-    protected @DrawableRes int buttonSelectorId;
+    private
+    @DrawableRes
+    int buttonSelectorId;
+    public void setButtonSelector(@DrawableRes int selectorId) {
+        this.buttonSelectorId = selectorId;
+    }
 
     /**
      * Настройка шрифта кнопок. Размер шрифта указывается в sp.
      */
-    protected int buttonTextColor;
-    protected int buttonTextSize;
-    protected Typeface buttonTextTypeface;
-    protected TextStyle buttonTextStyle;
+    private int buttonTextColor;
+    private int buttonTextSize;
+    private Typeface buttonTextTypeface;
+    private TextStyle buttonTextStyle;
+    private boolean isTextBtnAllCaps;
+    public void setButtonTextColor(int textColor) {
+        this.buttonTextColor = textColor;
+    }
+    public void setButtonTextSize(int textSizeSp) {
+        this.buttonTextSize = textSizeSp;
+    }
+    public void setButtonTypeface(Typeface typeface, TextStyle textStyle) {
+        this.buttonTextTypeface = typeface;
+        this.buttonTextStyle = textStyle;
+    }
+    public void setButtonAllCaps(boolean isTextAllCaps) {
+        this.isTextBtnAllCaps = isTextAllCaps;
+    }
 
     /**
      * Выравнивание текста кнопок.
      */
-    protected int buttonTextGravity;
+    private int buttonTextGravity;
+    public void setButtonGravity(int textGravity) {
+        this.buttonTextGravity = textGravity;
+    }
 
     /**
-     * Фон горизонтальной и вертикальных линии layout'а кнопок.
-     * Первыми проверяются ресурсы dividerBtnHorizontalResId и dividerBtnVerticalResId,
-     * если они не равны -1, то устанавливаются фоном.
-     * В противном случае, фоном ставятся цвета dividerBtnHorizontalColor и dividerBtnVerticalColor.
+     * Фон горизонтальной линии layout'а кнопок.
+     * Если isDividerBtnHorizontalRes = true, то фоном будет ресурс dividerBtnHorizontalResId.
+     * В противном случае, фоном ставится цвет dividerBtnHorizontalColor.
      */
-    protected @DrawableRes int dividerBtnHorizontalResId;
-    protected @DrawableRes int dividerBtnVerticalResId;
-    protected int dividerBtnHorizontalColor;
-    protected int dividerBtnVerticalColor;
+    private
+    @DrawableRes
+    int dividerBtnHorizontalResId;
+    private int dividerBtnHorizontalColor;
+    private boolean isDividerBtnHorizontalRes;
+    public void setDividerButtonHorizontalRes(@DrawableRes int resId) {
+        this.dividerBtnHorizontalResId = resId;
+        isDividerBtnHorizontalRes = true;
+    }
+    public void setDividerButtonHorizontalColor(int color) {
+        this.dividerBtnHorizontalColor = color;
+        isDividerBtnHorizontalRes = false;
+    }
+
+    /**
+     * Фон вертикальных линий layout'а кнопок.
+     * Если isDividerBtnVerticalRes = true, то фоном будет ресурс dividerBtnVerticalResId.
+     * В противном случае, фоном ставится цвет dividerBtnVerticalColor.
+     */
+    private
+    @DrawableRes
+    int dividerBtnVerticalResId;
+    private int dividerBtnVerticalColor;
+    private boolean isDividerBtnVerticalRes;
+    public void setDividerButtonVerticalRes(@DrawableRes int resId) {
+        this.dividerBtnVerticalResId = resId;
+        isDividerBtnVerticalRes = true;
+    }
+    public void setDividerButtonVerticalColor(int color) {
+        this.dividerBtnVerticalColor = color;
+        isDividerBtnVerticalRes = false;
+    }
 
     /**
      * Ширина горизонтальной и вертикальных линий layout'а кнопок в dp.
      */
-    protected int dividerBtnHorizontalWidth;
-    protected int dividerBtnVerticalWidth;
+    private int dividerBtnHorizontalWidth;
+    private int dividerBtnVerticalWidth;
+    public void setDividerButtonHorizontalWidth(int widthDp) {
+        this.dividerBtnHorizontalWidth = widthDp;
+    }
+    public void setDividerButtonVerticalWidth(int widthDp) {
+        this.dividerBtnVerticalWidth = widthDp;
+    }
 
     /**
      * Настройка шрифта сообщения в MessageDialog. Размер шрифта указывается в sp.
      */
-    protected int messageTextColor;
-    protected int messageTextSize;
-    protected Typeface messageTextTypeface;
-    protected TextStyle messageTextStyle;
+    private int messageTextColor;
+    private int messageTextSize;
+    private Typeface messageTextTypeface;
+    private TextStyle messageTextStyle;
+    public void setMessageColor(int textColor) {
+        this.messageTextColor = textColor;
+    }
+    public void setMessageSize(int textSizeSp) {
+        this.messageTextSize = textSizeSp;
+    }
+    public void setMessageTypeface(Typeface typeface, TextStyle textStyle) {
+        this.messageTextTypeface = typeface;
+        this.messageTextStyle = textStyle;
+    }
 
     /**
      * Выравнивание текста сообщения в MessageDialog.
      */
-    protected int messageTextGravity;
+    private int messageTextGravity;
+    public void setMessageGravity(int textGravity) {
+        this.messageTextGravity = textGravity;
+    }
 
     /**
      * Отступы сообщения в MessageDialog. Указываются в dp.
      */
-    protected int tvMessagePaddingStart;
-    protected int tvMessagePaddingTop;
-    protected int tvMessagePaddingEnd;
-    protected int tvMessagePaddingBottom;
+    private int tvMessagePaddingStart;
+    private int tvMessagePaddingTop;
+    private int tvMessagePaddingEnd;
+    private int tvMessagePaddingBottom;
+    public void setMessagePadding(int startPaddingDp, int topPaddingDp, int endPaddingDp, int bottomPaddingDp) {
+        this.tvMessagePaddingStart = startPaddingDp;
+        this.tvMessagePaddingTop = topPaddingDp;
+        this.tvMessagePaddingEnd = endPaddingDp;
+        this.tvMessagePaddingBottom = bottomPaddingDp;
+    }
 
     /**
-     * Ресурс селектора пунктов в ListDialog.
+     * Ресурс селектора фона пунктов в ListDialog.
      */
-    protected  @DrawableRes int listItemBackgroundSelector;
+    private
+    @DrawableRes
+    int listItemBackgroundSelector;
+    public void setListItemSelector(@DrawableRes int backgroundSelector) {
+        this.listItemBackgroundSelector = backgroundSelector;
+    }
 
     /**
      * Настройка шрифта пунктов в ListDialog. Размер шрифта указывается в sp.
      */
-    protected int listItemTextColor;
-    protected int listItemTextSize;
-    protected Typeface listItemTextTypeface;
-    protected TextStyle listItemTextStyle;
+    private int listItemTextColor;
+    private int listItemTextSize;
+    private Typeface listItemTextTypeface;
+    private TextStyle listItemTextStyle;
+    public void setListTextColor(int textColor) {
+        this.listItemTextColor = textColor;
+    }
+    public void setListTextSize(int textSizeSp) {
+        this.listItemTextSize = textSizeSp;
+    }
+    public void setListTypeface(Typeface typeface, TextStyle textStyle) {
+        this.listItemTextTypeface = typeface;
+        this.listItemTextStyle = textStyle;
+    }
 
     /**
-     * Выравнивание текста сообщения в MessageDialog.
+     * Выравнивание текста сообщения в ListDialog.
      */
-    protected int listItemTextGravity;
+    private int listItemTextGravity;
+    public void setListTextGravity(int textGravity) {
+        this.listItemTextGravity = textGravity;
+    }
 
     /**
-     * Отступы сообщения в MessageDialog. Указываются в dp.
+     * Отступы сообщения в ListDialog. Указываются в dp.
      */
-    protected int tvListItemPaddingStart;
-    protected int tvListItemPaddingTop;
-    protected int tvListItemPaddingEnd;
-    protected int tvListItemPaddingBottom;
+    private int tvListItemPaddingStart;
+    private int tvListItemPaddingTop;
+    private int tvListItemPaddingEnd;
+    private int tvListItemPaddingBottom;
+    public void setListItemPadding(int startPaddingDp, int topPaddingDp, int endPaddingDp, int bottomPaddingDp) {
+        this.tvListItemPaddingStart = startPaddingDp;
+        this.tvListItemPaddingStart = topPaddingDp;
+        this.tvListItemPaddingStart = endPaddingDp;
+        this.tvListItemPaddingStart = bottomPaddingDp;
+    }
 
-
-    protected int editTextColor, hintTextColor;
-
-    protected int editTextSize;
-
-    protected Typeface editTextTypeface;
-
-    protected TextStyle editTextStyle;
-
-    private final Context context;
-
+    /**
+     * Ресурс селектора фона пунктов в SingleChoiceDialog.
+     */
+    private
     @DrawableRes
-    protected int singleFlagSelector, multiFlagSelector;
+    int sChoiceItemBackgroundSelector;
+    public void setSingleChoiceSelector(@DrawableRes int backgroundSelector) {
+        this.sChoiceItemBackgroundSelector = backgroundSelector;
+    }
+
+    /**
+     * Ресурсы флажков переключателя пунктов с левой и правой стороны в SingleChoiceDialog.
+     * Можно установить только с одной стороны. Если sChoiceItemLeftFlagSelector не равно -1,
+     * то устанавливается с левой стороны. В противном случае - с правой.
+     */
+    private
+    @DrawableRes
+    int sChoiceItemLeftFlagSelector;
+    private
+    @DrawableRes
+    int sChoiceItemRightFlagSelector;
+    private boolean isSChoiceLeftFlag;
+
+    public void setSingleChoiceLeftFlag(@DrawableRes int flagSelector) {
+        this.sChoiceItemLeftFlagSelector = flagSelector;
+        isSChoiceLeftFlag = true;
+    }
+
+    public void setSingleChoiceRightFlag(@DrawableRes int flagSelector) {
+        this.sChoiceItemRightFlagSelector = flagSelector;
+        isSChoiceLeftFlag = false;
+    }
+
+    /**
+     * Настройка шрифта пунктов в SingleChoiceDialog. Размер шрифта указывается в sp.
+     */
+    private int sChoiceItemTextColor;
+    private int sChoiceItemTextSize;
+    private Typeface sChoiceItemTextTypeface;
+    private TextStyle sChoiceItemTextStyle;
+    public void setSingleChoiceTextColor(int textColor) {
+        this.sChoiceItemTextColor = textColor;
+    }
+    public void setSingleChoiceTextSize(int textSizeSp) {
+        this.sChoiceItemTextSize = textSizeSp;
+    }
+    public void setSingleChoiceTypeface(Typeface typeface, TextStyle textStyle) {
+        this.sChoiceItemTextTypeface = typeface;
+        this.sChoiceItemTextStyle = textStyle;
+    }
+
+    /**
+     * Выравнивание текста сообщения в SingleChoiceDialog.
+     */
+    private int sChoiceItemTextGravity;
+    public void setSingleChoiceTextGravity(int textGravity) {
+        this.sChoiceItemTextGravity = textGravity;
+    }
+
+    /**
+     * Отступы сообщения в SingleChoiceDialog. Указываются в dp.
+     */
+    private int tvSChoiceItemPaddingStart;
+    private int tvSChoiceItemPaddingTop;
+    private int tvSChoiceItemPaddingEnd;
+    private int tvSChoiceItemPaddingBottom;
+    public void setSingleChoicePadding(int startPaddingDp, int topPaddingDp, int endPaddingDp, int bottomPaddingDp) {
+        this.tvSChoiceItemPaddingStart = startPaddingDp;
+        this.tvSChoiceItemPaddingTop = topPaddingDp;
+        this.tvSChoiceItemPaddingEnd = endPaddingDp;
+        this.tvSChoiceItemPaddingBottom = bottomPaddingDp;
+    }
+
+    /**
+     * Ресурс селектора фона пунктов в MultiChoiceDialog.
+     */
+    private
+    @DrawableRes
+    int mChoiceItemBackgroundSelector;
+    public void setMultiChoiceSelector(@DrawableRes int backgroundSelector) {
+        this.mChoiceItemBackgroundSelector = backgroundSelector;
+    }
+
+    /**
+     * Ресурсы флажков переключателя пунктов с левой и правой стороны в MultiChoiceDialog.
+     * Можно установить только с одной стороны. Если mChoiceItemLeftFlagSelector не равно -1,
+     * то устанавливается с левой стороны. В противном случае - с правой.
+     */
+    private
+    @DrawableRes
+    int mChoiceItemLeftFlagSelector;
+    private
+    @DrawableRes
+    int mChoiceItemRightFlagSelector;
+    private boolean isMChoiceLeftFlag;
+    public void setMultiChoiceLeftFlag(@DrawableRes int flagSelector) {
+        this.mChoiceItemLeftFlagSelector = flagSelector;
+        isMChoiceLeftFlag = true;
+    }
+    public void setMultiChoiceRightFlag(@DrawableRes int flagSelector) {
+        this.mChoiceItemRightFlagSelector = flagSelector;
+        isMChoiceLeftFlag = false;
+    }
+
+    /**
+     * Настройка шрифта пунктов в MultiChoiceDialog. Размер шрифта указывается в sp.
+     */
+    private int mChoiceItemTextColor;
+    private int mChoiceItemTextSize;
+    private Typeface mChoiceItemTextTypeface;
+    private TextStyle mChoiceItemTextStyle;
+    public void setMultiChoiceTextColor(int textColor) {
+        this.mChoiceItemTextColor = textColor;
+    }
+    public void setMultiChoiceTextSize(int textSizeSp) {
+        this.mChoiceItemTextSize = textSizeSp;
+    }
+    public void setMultiChoiceTextTypeface(Typeface textTypeface, TextStyle textStyle) {
+        this.mChoiceItemTextTypeface = textTypeface;
+        this.mChoiceItemTextStyle = textStyle;
+    }
+
+    /**
+     * Выравнивание текста сообщения в MultiChoiceDialog.
+     */
+    private int mChoiceItemTextGravity;
+
+    public void setMultiChoiceTextGravity(int textGravity) {
+        this.mChoiceItemTextGravity = textGravity;
+    }
+
+    /**
+     * Отступы сообщения в MultiChoiceDialog. Указываются в dp.
+     */
+    private int tvMChoiceItemPaddingStart;
+    private int tvMChoiceItemPaddingTop;
+    private int tvMChoiceItemPaddingEnd;
+    private int tvMChoiceItemPaddingBottom;
+    public void setMultiChoicePadding(int startPaddingDp, int topPaddingDp, int endPaddingDp, int bottomPaddingDp) {
+        this.tvMChoiceItemPaddingStart = startPaddingDp;
+        this.tvMChoiceItemPaddingTop = topPaddingDp;
+        this.tvMChoiceItemPaddingEnd = endPaddingDp;
+        this.tvMChoiceItemPaddingBottom = bottomPaddingDp;
+    }
+
+
+
+    private int editTextColor, hintTextColor;
+    private int editTextSize;
+    private Typeface editTextTypeface;
+    private TextStyle editTextStyle;
 
 
     protected HoloDialogFactory(Context context) {
-        this.context = context;
-
+        isBackgroundDialogRes = false;
         backgroundDialogColor = context.getResources().getColor(R.color.holo_dialog_background);
-        backgroundDialogResId = -1;
 
-        layTitleBackgroundResId = -1;
-        layTitleBackgroundColor = -1;
+        titleBgSet = TitleBgSet.NO;
 
         titleColor = context.getResources().getColor(R.color.holo_title_text);
-        titleSize = 18;
+        titleSize = 22;
         titleTypeface = Typeface.DEFAULT;
         titleStyle = TextStyle.NORMAL;
         titleGravity = Gravity.START;
 
-        tvTitlePaddingStart = 16;
-        tvTitlePaddingTop = 16;
-        tvTitlePaddingEnd = 16;
-        tvTitlePaddingBottom = 16;
+        tvTitlePaddingStart = 20;
+        tvTitlePaddingTop = 20;
+        tvTitlePaddingEnd = 20;
+        tvTitlePaddingBottom = 20;
 
-        dividerTitleResId = -1;
+        isDividerTitleRes = false;
         dividerTitleColor = context.getResources().getColor(R.color.holo_title_divider);
         dividerTitleWidth = 2;
 
         buttonSelectorId = R.drawable.holo_btn_selector;
 
         buttonTextColor = context.getResources().getColor(R.color.holo_button_text);
-        buttonTextSize = 12;
+        buttonTextSize = 14;
         buttonTextTypeface = Typeface.DEFAULT;
         buttonTextStyle = TextStyle.NORMAL;
         buttonTextGravity = -1;
+        isTextBtnAllCaps = false;
 
+        isDividerBtnHorizontalRes = false;
         dividerBtnHorizontalColor = context.getResources().getColor(R.color.holo_button_divider);
+        isDividerBtnVerticalRes = false;
         dividerBtnVerticalColor = context.getResources().getColor(R.color.holo_button_divider);
-        dividerBtnHorizontalResId = -1;
-        dividerBtnVerticalResId = -1;
 
-        dividerBtnHorizontalWidth = 2;
-        dividerBtnVerticalWidth = 2;
+        dividerBtnHorizontalWidth = 1;
+        dividerBtnVerticalWidth = 1;
 
         messageTextColor = context.getResources().getColor(R.color.holo_message_text);
-        messageTextSize = 16;
+        messageTextSize = 18;
         messageTextTypeface = Typeface.DEFAULT;
         messageTextStyle = TextStyle.NORMAL;
 
@@ -223,32 +517,64 @@ public class HoloDialogFactory implements DialogFactory {
         listItemBackgroundSelector = R.drawable.holo_list_item_selector;
 
         listItemTextColor = context.getResources().getColor(R.color.holo_list_item_text);
-        listItemTextSize = 16;
+        listItemTextSize = 18;
         listItemTextTypeface = Typeface.DEFAULT;
         listItemTextStyle = TextStyle.NORMAL;
 
         listItemTextGravity = -1;
 
-        tvListItemPaddingStart = 12;
-        tvListItemPaddingTop = 12;
-        tvListItemPaddingEnd = 12;
-        tvListItemPaddingBottom = 12;
+        tvListItemPaddingStart = 18;
+        tvListItemPaddingTop = 18;
+        tvListItemPaddingEnd = 18;
+        tvListItemPaddingBottom = 18;
+
+        sChoiceItemBackgroundSelector = R.drawable.holo_list_item_selector;
+
+        isSChoiceLeftFlag = false;
+        sChoiceItemRightFlagSelector = R.drawable.holo_radiobtn_selector;
+
+        sChoiceItemTextColor = context.getResources().getColor(R.color.holo_list_item_text);
+        sChoiceItemTextSize = 18;
+        sChoiceItemTextTypeface = Typeface.DEFAULT;
+        sChoiceItemTextStyle = TextStyle.NORMAL;
+
+        sChoiceItemTextGravity = -1;
+
+        tvSChoiceItemPaddingStart = 18;
+        tvSChoiceItemPaddingTop = 18;
+        tvSChoiceItemPaddingEnd = 18;
+        tvSChoiceItemPaddingBottom = 18;
+
+        mChoiceItemBackgroundSelector = R.drawable.holo_list_item_selector;
+
+        isMChoiceLeftFlag = false;
+        mChoiceItemRightFlagSelector = R.drawable.holo_checkbox_selector;
+
+        mChoiceItemTextColor = context.getResources().getColor(R.color.holo_list_item_text);
+        mChoiceItemTextSize = 18;
+        mChoiceItemTextTypeface = Typeface.DEFAULT;
+        mChoiceItemTextStyle = TextStyle.NORMAL;
+
+        mChoiceItemTextGravity = Gravity.CENTER_VERTICAL;
+
+        tvMChoiceItemPaddingStart = 18;
+        tvMChoiceItemPaddingTop = 18;
+        tvMChoiceItemPaddingEnd = 18;
+        tvMChoiceItemPaddingBottom = 18;
 
 
-
-
-
-
-        editTextColor = context.getResources().getColor(R.color.holo_dark_edit_text);
+        editTextColor = context.getResources().getColor(R.color.holo_edit_text);
         editTextSize = 16;
         editTextTypeface = Typeface.DEFAULT;
         editTextStyle = TextStyle.NORMAL;
-        hintTextColor = context.getResources().getColor(R.color.holo_dark_edit_hint);
-
-        singleFlagSelector = R.drawable.holo_radiobtn_selector;
-        multiFlagSelector = R.drawable.holo_checkbox_selector;
+        hintTextColor = context.getResources().getColor(R.color.holo_edit_text_hint);
     }
 
+    /**
+     * Создание и установка настроек ListDialog.
+     *
+     * @return объект типа ListDialog
+     */
     public ListDialog createListDialog() {
         HoloListDialog dialog = new HoloListDialog();
         setViewProperties(dialog);
@@ -258,39 +584,60 @@ public class HoloDialogFactory implements DialogFactory {
         dialog.setItemTextSize(listItemTextSize);
         dialog.setItemTextTypeface(listItemTextTypeface, listItemTextStyle);
         dialog.setItemTextGravity(listItemTextGravity);
-        dialog.setItemTextPaddingDP(tvListItemPaddingStart, tvListItemPaddingTop, tvListItemPaddingEnd, tvListItemPaddingBottom);
+        dialog.setItemTextPaddingDP(tvListItemPaddingStart, tvListItemPaddingTop,
+                tvListItemPaddingEnd, tvListItemPaddingBottom);
         return dialog;
     }
 
-
-    public ChoiceDialogFragment getChoiceDialog(boolean isMultiChoice) {
-        ChoiceDialogFragment dialog = new ChoiceDialogFragment();
-        setViewProperties(dialog);
-        setListItemProperties(dialog);
-        dialog.setMultiChoiceMode(isMultiChoice);
-        if(isMultiChoice){
-            dialog.setFlagSelector(multiFlagSelector);
-        } else {
-            dialog.setFlagSelector(singleFlagSelector);
-
-        }
-        return dialog;
-    }
-
+    /**
+     * Создание и установка настроек SingleChoiceDialog.
+     *
+     * @return объект типа SingleChoiceDialog
+     */
     public SingleChoiceDialog createSingleChoiceDialog() {
         HoloSingleChoiceDialog dialog = new HoloSingleChoiceDialog();
         setViewProperties(dialog);
+        setTitleProperties(dialog);
         setButtonsProperties(dialog);
+        dialog.setItemBackgroundSelector(sChoiceItemBackgroundSelector);
+        if (isSChoiceLeftFlag) dialog.setLeftFlagSelector(sChoiceItemLeftFlagSelector);
+        else dialog.setRightFlagSelector(sChoiceItemRightFlagSelector);
+        dialog.setItemTextColor(mChoiceItemTextColor);
+        dialog.setItemTextSize(mChoiceItemTextSize);
+        dialog.setItemTextTypeface(mChoiceItemTextTypeface, mChoiceItemTextStyle);
+        dialog.setItemTextGravity(mChoiceItemTextGravity);
+        dialog.setItemTextPaddingDP(tvMChoiceItemPaddingStart, tvMChoiceItemPaddingTop,
+                tvMChoiceItemPaddingEnd, tvMChoiceItemPaddingBottom);
         return dialog;
     }
 
+    /**
+     * Создание и установка настроек MultiChoiceDialog.
+     *
+     * @return объект типа MultiChoiceDialog
+     */
     public MultiChoiceDialog createMultiChoiceDialog() {
         HoloMultiChoiceDialog dialog = new HoloMultiChoiceDialog();
         setViewProperties(dialog);
+        setTitleProperties(dialog);
         setButtonsProperties(dialog);
-        return  dialog;
+        dialog.setItemBackgroundSelector(mChoiceItemBackgroundSelector);
+        if (isMChoiceLeftFlag) dialog.setLeftFlagSelector(mChoiceItemLeftFlagSelector);
+        else dialog.setRightFlagSelector(mChoiceItemRightFlagSelector);
+        dialog.setItemTextColor(mChoiceItemTextColor);
+        dialog.setItemTextSize(mChoiceItemTextSize);
+        dialog.setItemTextTypeface(mChoiceItemTextTypeface, mChoiceItemTextStyle);
+        dialog.setItemTextGravity(mChoiceItemTextGravity);
+        dialog.setItemTextPaddingDP(tvMChoiceItemPaddingStart, tvMChoiceItemPaddingTop,
+                tvMChoiceItemPaddingEnd, tvMChoiceItemPaddingBottom);
+        return dialog;
     }
 
+    /**
+     * Создание и установка настроек MessageDialog.
+     *
+     * @return объект типа MessageDialog
+     */
     public MessageDialog createMessageDialog() {
         HoloMessageDialog dialog = new HoloMessageDialog();
         setViewProperties(dialog);
@@ -299,14 +646,14 @@ public class HoloDialogFactory implements DialogFactory {
         dialog.setMessageColor(messageTextColor);
         dialog.setMessageSize(messageTextSize);
         dialog.setMessageFont(messageTextTypeface, messageTextStyle);
-        if(messageTextGravity > -1){
+        if (messageTextGravity > -1) {
             dialog.setMessageGravity(messageTextGravity);
         }
         dialog.setMessagePaddingDP(tvMessagePaddingStart, tvMessagePaddingTop, tvMessagePaddingEnd, tvMessagePaddingBottom);
         return dialog;
     }
 
-    public EditTextDialogFragment getEditTextDialog(){
+    public EditTextDialogFragment getEditTextDialog() {
         EditTextDialogFragment dialog = new EditTextDialogFragment();
         setViewProperties(dialog);
         setTitleProperties(dialog);
@@ -318,13 +665,6 @@ public class HoloDialogFactory implements DialogFactory {
         return dialog;
     }
 
-    private void setListItemProperties(HoloListDialog dialog) {
-        dialog.setItemBackgroundSelector(listItemBackgroundSelector);
-        dialog.setItemTextColor(listItemTextColor);
-        dialog.setItemTextSize(listItemTextSize);
-        dialog.setItemTextTypeface(listItemTextTypeface, listItemTextStyle);
-    }
-
     /**
      * Установка настроек главного view диалогового окна.
      *
@@ -332,9 +672,9 @@ public class HoloDialogFactory implements DialogFactory {
      */
     private void setViewProperties(HoloRootDialog dialog) {
         Log.d(Statical.TAG, "setBaseProperties");
-        if(backgroundDialogResId > -1){
+        if (isBackgroundDialogRes) {
             dialog.setDialogBackground(backgroundDialogResId);
-        } else if(backgroundDialogColor > -1) {
+        } else {
             dialog.setDialogBackgroundColor(backgroundDialogColor);
         }
     }
@@ -345,21 +685,21 @@ public class HoloDialogFactory implements DialogFactory {
      * @param dialog Объкт диалогового окна.
      */
     private void setTitleProperties(HoloRootDialog dialog) {
-        if(layTitleBackgroundResId > -1){
+        if (titleBgSet == TitleBgSet.RES) {
             dialog.setDialogBackground(layTitleBackgroundResId);
-        } else if(layTitleBackgroundColor > -1){
+        } else if (titleBgSet == TitleBgSet.COLOR) {
             dialog.setDialogBackgroundColor(layTitleBackgroundColor);
         }
         dialog.setTitleTextColor(titleColor);
         dialog.setTitleTextSize(titleSize);
         dialog.setTitleTextFont(titleTypeface, titleStyle);
-        if(titleGravity > -1) {
+        if (titleGravity > -1) {
             dialog.setTitleGravity(titleGravity);
         }
         dialog.setTvTitlePaddingDP(tvTitlePaddingStart, tvTitlePaddingTop, tvTitlePaddingEnd, tvTitlePaddingBottom);
-        if(dividerTitleResId > -1){
+        if (isDividerTitleRes) {
             dialog.setDividerTitleBackground(dividerTitleResId);
-        } else{
+        } else {
             dialog.setDividerTitleColor(dividerTitleColor);
         }
         dialog.setDividerTitleWidth(dividerTitleWidth);
@@ -371,22 +711,23 @@ public class HoloDialogFactory implements DialogFactory {
      * @param dialog Объкт диалогового окна.
      */
     private void setButtonsProperties(HoloBaseDialog dialog) {
+        dialog.setButtonsAllCaps(isTextBtnAllCaps);
         dialog.setButtonsSelectorId(buttonSelectorId);
         dialog.setTextButtonsColor(buttonTextColor);
         dialog.setTextButtonsSize(buttonTextSize);
         dialog.setTextButtonsFont(buttonTextTypeface, buttonTextStyle);
-        if(buttonTextGravity > -1){
+        if (buttonTextGravity > -1) {
             dialog.setTextButtonsGravity(buttonTextGravity);
         }
-        if(dividerBtnHorizontalResId > -1){
+        if (isDividerBtnHorizontalRes) {
             dialog.setTopDividerBtnResId(dividerBtnHorizontalResId);
-        } else{
+        } else {
             dialog.setTopDividerBtnColor(dividerBtnHorizontalColor);
         }
-        if(dividerBtnVerticalResId > -1){
+        if (isDividerBtnVerticalRes) {
             dialog.setLeftDividerBtnResId(dividerBtnVerticalResId);
             dialog.setRightDividerBtnResId(dividerBtnVerticalResId);
-        } else{
+        } else {
             dialog.setLeftDividerBtnColor(dividerBtnVerticalColor);
             dialog.setRightDividerBtnColor(dividerBtnVerticalColor);
         }

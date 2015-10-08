@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialogs.HoloMessageDialog;
+import com.neirx.neirdialogs.interfaces.MessageDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 
 public class MessageDialogActivity extends Activity implements View.OnClickListener,
@@ -16,7 +16,7 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
             "Jackdaws love my big sphinx of quartz. " +
             "The five boxing wizards jump QUICKLY";
     Button btnTitleAllBtn, btnTitleTwoBtn, btnTitleOneBtn, btnNoTitleAndBtn;
-    CustomDialogCreator dialogCreator;
+    CustomDialogFactory dialogFactory;
     FragmentManager manager;
 
 
@@ -35,17 +35,17 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
         btnTitleOneBtn.setOnClickListener(this);
         btnNoTitleAndBtn.setOnClickListener(this);
 
-        dialogCreator = CustomDialogCreator.getInstance(this);
+        dialogFactory = CustomDialogFactory.getInstance(this);
         manager = getFragmentManager();
 
     }
 
     @Override
     public void onClick(View view) {
-        HoloMessageDialog dialogFragment;
+        MessageDialog dialogFragment;
         switch (view.getId()){
             case R.id.btnTitleAllBtn:
-                dialogFragment = dialogCreator.getMessageDialog();
+                dialogFragment = dialogFactory.createMessageDialog();
                 dialogFragment.setTitle("Title");
                 dialogFragment.setMessage(MESSAGE);
                 dialogFragment.setPositiveButton("Ok");
@@ -55,7 +55,7 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
                 dialogFragment.show(manager, "btnTitleAllBtn");
                 break;
             case R.id.btnTitleTwoBtn:
-                dialogFragment = dialogCreator.getMessageDialog();
+                dialogFragment = dialogFactory.createMessageDialog();
                 dialogFragment.setTitle("Title");
                 dialogFragment.setMessage(MESSAGE);
                 dialogFragment.setPositiveButton("Ok");
@@ -64,7 +64,7 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
                 dialogFragment.show(manager, "btnTitleTwoBtn");
                 break;
             case R.id.btnTitleOneBtn:
-                dialogFragment = dialogCreator.getMessageDialog();
+                dialogFragment = dialogFactory.createMessageDialog();
                 dialogFragment.setTitle("Title");
                 dialogFragment.setMessage(MESSAGE);
                 dialogFragment.setPositiveButton("Ok");
@@ -72,7 +72,7 @@ public class MessageDialogActivity extends Activity implements View.OnClickListe
                 dialogFragment.show(manager, "btnTitleOneBtn");
                 break;
             case R.id.btnNoTitleAndBtn:
-                dialogFragment = dialogCreator.getMessageDialog();
+                dialogFragment = dialogFactory.createMessageDialog();
                 dialogFragment.setMessage(MESSAGE);
                 dialogFragment.setOnClickListener(this, "btnTitleOneBtn");
                 dialogFragment.show(manager, "btnTitleOneBtn");

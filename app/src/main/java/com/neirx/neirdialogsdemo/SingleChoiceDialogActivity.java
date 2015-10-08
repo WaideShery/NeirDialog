@@ -7,15 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialogs.ChoiceDialogFragment;
+import com.neirx.neirdialogs.dialogs.HoloChoiceDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
+import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SingleChoiceDialogActivity extends Activity implements View.OnClickListener, NeirDialogInterface.OnClickListener {
     Button btnTitleAllBtn, btnTitleTwoBtn, btnTitleOneBtn, btnNoTitleOneBtn, btnNoTitleNoBtn;
-    CustomDialogCreator dialogCreator;
+    CustomDialogFactory dialogFactory;
     FragmentManager manager;
 
     @Override
@@ -35,7 +36,7 @@ public class SingleChoiceDialogActivity extends Activity implements View.OnClick
         btnNoTitleOneBtn.setOnClickListener(this);
         btnNoTitleNoBtn.setOnClickListener(this);
 
-        dialogCreator = CustomDialogCreator.getInstance(this);
+        dialogFactory = CustomDialogFactory.getInstance(this);
         manager = getFragmentManager();
     }
 
@@ -43,7 +44,7 @@ public class SingleChoiceDialogActivity extends Activity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnTitleAllBtn:
-                ChoiceDialogFragment dialog = dialogCreator.getChoiceDialog(false);
+                SingleChoiceDialog dialog = dialogFactory.createSingleChoiceDialog();
                 dialog.setTitle("Title");
                 List<String> items = new ArrayList<>();
                 items.add("First");

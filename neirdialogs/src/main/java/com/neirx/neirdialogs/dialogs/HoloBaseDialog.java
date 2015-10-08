@@ -2,12 +2,14 @@ package com.neirx.neirdialogs.dialogs;
 
 import android.app.Dialog;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.neirx.neirdialogs.enums.TextStyle;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
@@ -25,6 +27,9 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     protected View lineBtnLeftVer;
     protected View lineBtnRightVer;
     protected Button btnNegative, btnNeutral, btnPositive;
+
+    //Определяет, выводить ли текст кнопок в верхнем регистре.
+    protected boolean isButtonsAllCaps;
 
     //Определяет какие кнопки установлены, от 0 до 7.
     // В формате 000(NEGATIVE_BTN, NEUTRAL_BTN, POSITIVE_BTN).
@@ -44,10 +49,10 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     int negativeBtnSelectorId = -1, positiveBtnSelectorId = -1, neutralBtnSelectorId = -1;
 
     //Параметры и фон разделяющих линий кнопок
-    protected int topDividerBtnColor = -1, leftDividerBtnColor = -1, rightDividerBtnColor = -1;
-    protected
-    @DrawableRes
-    int topDividerBtnResId = -1, leftDividerBtnResId = -1, rightDividerBtnResId = -1;
+    private int topDividerBtnColor = -1, leftDividerBtnColor = -1, rightDividerBtnColor = -1;
+    private @DrawableRes int topDividerBtnResId = -1, leftDividerBtnResId = -1, rightDividerBtnResId = -1;
+    private boolean isTopDividerBtnRes, isLeftDividerBtnRes, isRightDividerBtnRes;
+
     protected int topDividerBtnWidth = 0, leftDividerBtnWidth = 0, rightDividerBtnWidth = 0;
 
     //Обработчик нажатий на кнопки
@@ -72,6 +77,9 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     @Override
     public abstract Dialog onCreateDialog(Bundle savedInstanceState);
 
+    public void setButtonsAllCaps(boolean isButtonsAllCaps){
+        this.isButtonsAllCaps = isButtonsAllCaps;
+    }
     /**
      * Установка текста Positive кнопки.
      * Если не вызывать этот метод, то диалоговое окно не будет включать Positive кнопку.
@@ -351,9 +359,9 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
         topDividerBtnColor = color;
         leftDividerBtnColor = color;
         rightDividerBtnColor = color;
-        topDividerBtnResId = -1;
-        leftDividerBtnResId = -1;
-        rightDividerBtnResId = -1;
+        isTopDividerBtnRes = false;
+        isLeftDividerBtnRes = false;
+        isRightDividerBtnRes = false;
     }
 
     /**
@@ -363,7 +371,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setTopDividerBtnColor(int color) {
         topDividerBtnColor = color;
-        topDividerBtnResId = -1;
+        isTopDividerBtnRes = false;
     }
 
     /**
@@ -373,7 +381,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setLeftDividerBtnColor(int color) {
         leftDividerBtnColor = color;
-        leftDividerBtnResId = -1;
+        isLeftDividerBtnRes = false;
     }
 
     /**
@@ -383,7 +391,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setRightDividerBtnColor(int color) {
         rightDividerBtnColor = color;
-        rightDividerBtnResId = -1;
+        isRightDividerBtnRes = false;
     }
 
     /**
@@ -395,9 +403,9 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
         topDividerBtnResId = resId;
         leftDividerBtnResId = resId;
         rightDividerBtnResId = resId;
-        topDividerBtnColor = -1;
-        leftDividerBtnColor = -1;
-        rightDividerBtnColor = -1;
+        isTopDividerBtnRes = true;
+        isLeftDividerBtnRes = true;
+        isRightDividerBtnRes = true;
     }
 
     /**
@@ -407,7 +415,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setTopDividerBtnResId(@DrawableRes int resId) {
         topDividerBtnResId = resId;
-        topDividerBtnColor = -1;
+        isTopDividerBtnRes = true;
     }
 
     /**
@@ -417,7 +425,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setLeftDividerBtnResId(@DrawableRes int resId) {
         leftDividerBtnResId = resId;
-        leftDividerBtnColor = -1;
+        isLeftDividerBtnRes = true;
     }
 
     /**
@@ -427,7 +435,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      */
     public void setRightDividerBtnResId(@DrawableRes int resId) {
         rightDividerBtnResId = resId;
-        rightDividerBtnColor = -1;
+        isRightDividerBtnRes = true;
     }
 
     /**
@@ -551,11 +559,11 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * Установка параметров верхней горизонтальной линии кнопок.
      */
     protected void setTopLineParam(){
-        if(topDividerBtnResId > -1)lineBtnTopHor.setBackgroundResource(topDividerBtnResId);
-        else if (topDividerBtnColor > -1) lineBtnTopHor.setBackgroundColor(topDividerBtnColor);
+        if(isTopDividerBtnRes)lineBtnTopHor.setBackgroundResource(topDividerBtnResId);
+        else lineBtnTopHor.setBackgroundColor(topDividerBtnColor);
         if(topDividerBtnWidth > 0) {
             int height = (int) getDP(topDividerBtnWidth);
-            lineBtnTopHor.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            lineBtnTopHor.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
         }
     }
 
@@ -563,11 +571,11 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * Установка параметров левой вертикальной линии кнопок.
      */
     protected void setLeftLineParam(){
-        if(leftDividerBtnResId > -1)lineBtnLeftVer.setBackgroundResource(leftDividerBtnResId);
-        else if (leftDividerBtnColor > -1) lineBtnLeftVer.setBackgroundColor(leftDividerBtnColor);
+        if(isLeftDividerBtnRes)lineBtnLeftVer.setBackgroundResource(leftDividerBtnResId);
+        else lineBtnLeftVer.setBackgroundColor(leftDividerBtnColor);
         if(leftDividerBtnWidth > 0) {
             int width = (int) getDP(leftDividerBtnWidth);
-            lineBtnLeftVer.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
+            lineBtnLeftVer.setLayoutParams(new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
         }
     }
 
@@ -575,19 +583,34 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * Установка параметров правой вертикальной линии кнопок.
      */
     protected void setRightLineParam(){
-        if(rightDividerBtnResId > -1)lineBtnRightVer.setBackgroundResource(rightDividerBtnResId);
-        else if (rightDividerBtnColor > -1) lineBtnRightVer.setBackgroundColor(rightDividerBtnColor);
+        if(isRightDividerBtnRes)lineBtnRightVer.setBackgroundResource(rightDividerBtnResId);
+        else lineBtnRightVer.setBackgroundColor(rightDividerBtnColor);
         if(rightDividerBtnWidth > 0) {
             int width = (int) getDP(rightDividerBtnWidth);
-            lineBtnRightVer.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
+            lineBtnRightVer.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.MATCH_PARENT));
         }
+    }
+
+    private String toLowCase(String text){
+        char[] chars = text.toCharArray();
+        for (int i=0; i<chars.length; i++){
+            if(i==0) continue;
+            chars[i] = Character.toLowerCase(chars[i]);
+        }
+        return new String(chars);
     }
 
     /**
      * Установка параметрой Negative кнопки.
      */
     protected void setNegativeBtnParam(){
-        btnNegative.setText(negativeButton);
+        if(Build.VERSION.SDK_INT >= 14){
+            btnNegative.setAllCaps(isButtonsAllCaps);
+            btnNegative.setText(negativeButton);
+        } else {
+            if(isButtonsAllCaps) btnNegative.setText(negativeButton.toUpperCase());
+            else btnNegative.setText(toLowCase(negativeButton));
+        }
         if(textColorNegativeBtn > -1) btnNegative.setTextColor(textColorNegativeBtn);
         if(textSizeNegativeBtn > 0) btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeNegativeBtn);
 
@@ -605,7 +628,13 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * Установка параметрой Neutral кнопки.
      */
     protected void setNeutralBtnParam(){
-        btnNeutral.setText(neutralButton);
+        if(Build.VERSION.SDK_INT >= 14){
+            btnNeutral.setAllCaps(isButtonsAllCaps);
+            btnNeutral.setText(neutralButton);
+        } else {
+            if(isButtonsAllCaps) btnNeutral.setText(neutralButton.toUpperCase());
+            else btnNeutral.setText(toLowCase(neutralButton));
+        }
         if(textColorNeutralBtn > -1) btnNeutral.setTextColor(textColorNeutralBtn);
         if(textSizeNeutralBtn > 0) btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeNeutralBtn);
 
@@ -623,7 +652,13 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      * Установка параметрой Positive кнопки.
      */
     protected void setPositiveBtnParam(){
-        btnPositive.setText(positiveButton);
+        if(Build.VERSION.SDK_INT >= 14){
+            btnPositive.setAllCaps(isButtonsAllCaps);
+            btnPositive.setText(positiveButton);
+        } else {
+            if(isButtonsAllCaps) btnPositive.setText(positiveButton.toUpperCase());
+            else btnPositive.setText(toLowCase(positiveButton));
+        }
         if(textColorPositiveBtn > -1) btnPositive.setTextColor(textColorPositiveBtn);
         if(textSizePositiveBtn > 0) btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizePositiveBtn);
 

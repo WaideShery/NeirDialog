@@ -9,12 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.neirx.neirdialogs.Statical;
 import com.neirx.neirdialogs.enums.TextStyle;
 
 /**
@@ -43,7 +45,7 @@ public abstract class HoloRootDialog extends DialogFragment {
 
     //Параметры текстового поля заголовка
     private String title;
-    protected int titleColor = -1;
+    protected int titleColor;
     protected float titleSize = -1;
     protected Typeface titleTypeface;
     protected TextStyle titleStyle;
@@ -53,10 +55,11 @@ public abstract class HoloRootDialog extends DialogFragment {
             tvTitleCompoundDrawablesBottom;
 
     //Параметры и фон разделяющей линии заголовка
+    protected boolean isDividerTitleRes = false;
     protected
     @DrawableRes
-    int dividerTitleResId = -1;
-    protected int dividerTitleColor = -1;
+    int dividerTitleResId;
+    protected int dividerTitleColor;
     protected float dividerTitleWidth = 0;
 
     //Идентификатор диалогового окна
@@ -210,7 +213,7 @@ public abstract class HoloRootDialog extends DialogFragment {
      */
     public void setDividerTitleBackground(@DrawableRes int resId) {
         dividerTitleResId = resId;
-        dividerTitleColor = -1;
+        isDividerTitleRes = true;
     }
 
     /**
@@ -221,7 +224,7 @@ public abstract class HoloRootDialog extends DialogFragment {
      */
     public void setDividerTitleColor(int color) {
         dividerTitleColor = color;
-        dividerTitleResId = -1;
+        isDividerTitleRes = false;
     }
 
     /**
@@ -256,8 +259,7 @@ public abstract class HoloRootDialog extends DialogFragment {
         else if(layTitleBackgroundColor > -1) layTitle.setBackgroundColor(layTitleBackgroundColor);
 
         tvTitle.setText(title);
-
-        if(titleColor > -1) tvTitle.setTextColor(titleColor);
+        tvTitle.setTextColor(titleColor);
         if(titleSize > 0) tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
         if(titleTypeface != null && titleStyle != null) tvTitle.setTypeface(titleTypeface, titleStyle.getValue());
         else if(titleTypeface != null) tvTitle.setTypeface(titleTypeface);
@@ -282,12 +284,12 @@ public abstract class HoloRootDialog extends DialogFragment {
                     tvTitleCompoundDrawablesEnd, tvTitleCompoundDrawablesBottom);
         }
 
-        if (dividerTitleResId > -1) dividerTitle.setBackgroundResource(dividerTitleResId);
-        else if(dividerTitleColor > -1) dividerTitle.setBackgroundColor(dividerTitleColor);
+        if (isDividerTitleRes) dividerTitle.setBackgroundResource(dividerTitleResId);
+        else dividerTitle.setBackgroundColor(dividerTitleColor);
 
         if(dividerTitleWidth > 0) {
             int height = (int) getDP(dividerTitleWidth);
-            dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
         }
 
     }

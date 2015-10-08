@@ -6,45 +6,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.adapters.SingleChoiceAdapter;
+import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
-
-import java.util.List;
 
 /**
  * Created by Waide Shery on 07.10.2015.
  *
  */
-public class HoloSingleChoiceDialog extends HoloBaseDialog implements SingleChoiceDialog {
-    protected ListView lvChoice;
-    protected List<String> items;
-    protected boolean isMultiChoice;
-    protected int flagSelector, itemBackgroundSelector;
-    protected int requestCode = -1;
-    int[] checkedItemsPos;
-    BaseAdapter adapter;
-
-    /**
-     * Установка списка для адаптера ListView.
-     *
-     * @param items коллекция объектов имплементирующих интерфейс.
-     */
-    public void setItems(List<String> items, int... checkedItemsPos) {
-        this.items = items;
-        this.checkedItemsPos = checkedItemsPos;
-    }
-
+public class HoloSingleChoiceDialog extends HoloChoiceDialog implements SingleChoiceDialog {
+    SingleChoiceAdapter adapter;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.holo_list_dialog, null);
+        view = inflater.inflate(R.layout.holo_choice_dialog, null);
         lineBtnTopHor = view.findViewById(R.id.viewTop);
         lineBtnLeftVer = view.findViewById(R.id.viewLeft);
         lineBtnRightVer = view.findViewById(R.id.viewRight);
@@ -60,7 +43,7 @@ public class HoloSingleChoiceDialog extends HoloBaseDialog implements SingleChoi
         checkRootView();
         checkTitle();
         checkButtons();
-        checkList();
+        checkSingleChoice();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -70,6 +53,33 @@ public class HoloSingleChoiceDialog extends HoloBaseDialog implements SingleChoi
 
     @Override
     public void onClick(View view) {
+        dismiss();
+        if (onClickListener == null) {
+            Toast.makeText(getActivity(), "onClickListener == null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int id = view.getId();
+        int buttonId = 0;
+        if (id == R.id.btnPositive) {
+            buttonId = NeirDialogInterface.BUTTON_POSITIVE;
+        } else if (id == R.id.btnNegative) {
+            buttonId = NeirDialogInterface.BUTTON_NEGATIVE;
+        } else if (id == R.id.btnNeutral) {
+            buttonId = NeirDialogInterface.BUTTON_NEUTRAL;
+        }
 
+        Integer checkedPos = adapter.getCheckedItemPos();
+        onClickListener.onClick(tag, buttonId, checkedPos);
+
+    }
+
+    protected void checkSingleChoice() {
+
+        adapter = new SingleChoiceAdapter(items, checkedItemsPos, getActivity());
+        adapter.setItemParam(itemTextColor, itemTextSize, itemTextStyle, itemTextTypeface,
+                itemTextGravity, leftFlagSelectorId, rightFlagSelectorId, itemBackgroundSelectorId);
+        adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
+
+        lvChoice.setAdapter(adapter);
     }
 }

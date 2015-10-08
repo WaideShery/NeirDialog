@@ -23,12 +23,12 @@ import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 public class HoloListDialog extends HoloRootDialog implements ListDialog, AdapterView.OnItemClickListener {
     protected ListView lvChoice;
     protected String[] items;
-    protected int itemTextColor;
-    protected float itemTextSize;
+    protected int itemTextColor = -1;
+    protected float itemTextSize = 0;
     protected TextStyle itemTextStyle;
     protected Typeface itemTextTypeface;
-    protected int itemTextGravity;
-    protected int itemBackgroundSelector;
+    protected int itemTextGravity = -1;
+    protected int itemBackgroundSelectorId = -1;
     protected NeirDialogInterface.OnItemClickListener onItemClickListener;
     protected int itemPaddingStart = -1, itemPaddingTop = -1, itemPaddingEnd = -1, itemPaddingBottom = -1;
 
@@ -96,10 +96,10 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
     /**
      * Установка селектора фона пунктов списка.
      *
-     * @param itemBackgroundSelector селектор фона пунктов списка.
+     * @param itemBackgroundSelectorId селектор фона пунктов списка.
      */
-    public void setItemBackgroundSelector(@DrawableRes int itemBackgroundSelector){
-        this.itemBackgroundSelector = itemBackgroundSelector;
+    public void setItemBackgroundSelector(@DrawableRes int itemBackgroundSelectorId){
+        this.itemBackgroundSelectorId = itemBackgroundSelectorId;
     }
 
 
@@ -154,7 +154,7 @@ public class HoloListDialog extends HoloRootDialog implements ListDialog, Adapte
             noItems = true;
         }
         ListAdapter adapter = new ListAdapter(items, getActivity());
-        adapter.setItemParam(itemTextColor, itemTextSize, itemTextStyle, itemTextTypeface, itemTextGravity, itemBackgroundSelector);
+        adapter.setItemParam(itemTextColor, itemTextSize, itemTextStyle, itemTextTypeface, itemTextGravity, itemBackgroundSelectorId);
         adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
         lvChoice.setAdapter(adapter);
         if(noItems){

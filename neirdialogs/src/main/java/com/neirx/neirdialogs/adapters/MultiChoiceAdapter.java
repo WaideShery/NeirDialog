@@ -1,37 +1,26 @@
 package com.neirx.neirdialogs.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.support.annotation.DrawableRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-
 import com.neirx.neirdialogs.R;
 import com.neirx.neirdialogs.Statical;
-import com.neirx.neirdialogs.enums.TextStyle;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Waide Shery on 25.07.2015.
+ *
  */
-public class MultiChoiceAdapter extends BaseAdapter {
+public class MultiChoiceAdapter extends ChoiceAdapter {
     private LayoutInflater lInflater;
     private Context context;
     //private CheckBox checkBox;
     private List<String> listItems;
     List<Integer> listCheckedItemsPos;
-    private int textColor;
-    private float textSize;
-    private TextStyle textStyle;
-    private Typeface textTypeface;
-    @DrawableRes
-    private int flagSelector, bgSelector;
 
     public Integer[] getCheckedItemsPos(){
         if(listCheckedItemsPos == null){
@@ -40,8 +29,7 @@ public class MultiChoiceAdapter extends BaseAdapter {
         return listCheckedItemsPos.toArray(new Integer[listCheckedItemsPos.size()]);
     }
 
-    public MultiChoiceAdapter(List<String> listItems, int[] checkedItemsPos, Context context, int textColor, float textSize,
-                              TextStyle textStyle, Typeface textTypeface, int flagSelector, int bgSelector) {
+    public MultiChoiceAdapter(List<String> listItems, int[] checkedItemsPos, Context context) {
         this.listItems = listItems;
         this.listCheckedItemsPos = new ArrayList<>();
         if (checkedItemsPos != null) {
@@ -49,13 +37,6 @@ public class MultiChoiceAdapter extends BaseAdapter {
         }
         this.context = context;
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        this.textColor = textColor;
-        this.textSize = textSize;
-        this.textStyle = textStyle;
-        this.textTypeface = textTypeface;
-        this.flagSelector = flagSelector;
-        this.bgSelector = bgSelector;
     }
 
     private void addToCheckedList(int[] checkedItemsPos) {
@@ -100,13 +81,18 @@ public class MultiChoiceAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.adapter_multichoice, parent, false);
         }
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-
+        setParam(checkBox);
         checkBox.setText(listItems.get(position));
-        checkBox.setTextColor(textColor);
-        checkBox.setTextSize(textSize);
-        checkBox.setTypeface(textTypeface, textStyle.getValue());
-        checkBox.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(flagSelector), null);
-        checkBox.setBackgroundResource(bgSelector);
+        if(leftFlagSelectorId > -1){
+            checkBox.setCompoundDrawablesWithIntrinsicBounds(
+                    context.getResources().getDrawable(leftFlagSelectorId), null, null, null);
+        } else if(rightFlagSelectorId > -1){
+            checkBox.setCompoundDrawablesWithIntrinsicBounds(
+                    null, null, context.getResources().getDrawable(rightFlagSelectorId), null);
+        }
+        if(bgSelector > -1) checkBox.setBackgroundResource(bgSelector);
+        checkBox.setChecked(listCheckedItemsPos.contains(position));
+
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +105,6 @@ public class MultiChoiceAdapter extends BaseAdapter {
 
             }
         });
-        checkBox.setChecked(listCheckedItemsPos.contains(position));
         return view;
     }
 }

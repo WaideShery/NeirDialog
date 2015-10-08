@@ -24,7 +24,7 @@ public class ListAdapter extends BaseAdapter {
     private float itemTextSize;
     private TextStyle itemTextStyle;
     private Typeface itemTextTypeface;
-    private int itemBackgroundSelector;
+    private int itemBackgroundSelectorId;
     private int itemTextGravity;
     protected int itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom;
 
@@ -34,12 +34,12 @@ public class ListAdapter extends BaseAdapter {
     }
 
     public void setItemParam(int itemTextColor, float itemTextSize, TextStyle itemTextStyle,
-                             Typeface itemTextTypeface, int itemTextGravity, int itemBackgroundSelector){
+                             Typeface itemTextTypeface, int itemTextGravity, int itemBackgroundSelectorId){
         this.itemTextColor = itemTextColor;
         this.itemTextSize = itemTextSize;
         this.itemTextStyle = itemTextStyle;
         this.itemTextTypeface = itemTextTypeface;
-        this.itemBackgroundSelector = itemBackgroundSelector;
+        this.itemBackgroundSelectorId = itemBackgroundSelectorId;
         this.itemTextGravity = itemTextGravity;
     }
 
@@ -75,12 +75,12 @@ public class ListAdapter extends BaseAdapter {
 
         textView.setText(items[position]);
         setParam(textView);
-        if(itemBackgroundSelector > -1) view.setBackgroundResource(itemBackgroundSelector);
+        if(itemBackgroundSelectorId > -1) view.setBackgroundResource(itemBackgroundSelectorId);
         return view;
     }
 
     private void setParam(TextView textView){
-        if(itemTextColor > -1) textView.setTextColor(itemTextColor);
+        textView.setTextColor(itemTextColor);
         if(itemTextSize > 0) textView.setTextSize(itemTextSize);
         if(itemTextGravity > -1) textView.setGravity(itemTextGravity);
         if(itemTextTypeface != null && itemTextStyle != null) textView.setTypeface(itemTextTypeface, itemTextStyle.getValue());
@@ -94,6 +94,5 @@ public class ListAdapter extends BaseAdapter {
                 textView.setPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
             }
         }
-
     }
 }

@@ -2,22 +2,23 @@ package com.neirx.neirdialogsdemo;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.neirx.neirdialogs.dialogs.ChoiceDialogFragment;
+import com.neirx.neirdialogs.adapters.SingleChoiceAdapter;
+import com.neirx.neirdialogs.dialogs.HoloChoiceDialog;
+import com.neirx.neirdialogs.interfaces.MultiChoiceDialog;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
-import com.neirx.neirdialogsdemo.R;
+import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultiChoiceDialogActivity extends Activity implements View.OnClickListener, NeirDialogInterface.OnClickListener {
     Button btnTitleAllBtn, btnTitleTwoBtn, btnTitleOneBtn, btnNoTitleOneBtn, btnNoTitleNoBtn;
-    CustomDialogCreator dialogCreator;
+    CustomDialogFactory dialogFactory;
     FragmentManager manager;
 
     @Override
@@ -37,7 +38,7 @@ public class MultiChoiceDialogActivity extends Activity implements View.OnClickL
         btnNoTitleOneBtn.setOnClickListener(this);
         btnNoTitleNoBtn.setOnClickListener(this);
 
-        dialogCreator = CustomDialogCreator.getInstance(this);
+        dialogFactory = CustomDialogFactory.getInstance(this);
         manager = getFragmentManager();
     }
 
@@ -45,7 +46,7 @@ public class MultiChoiceDialogActivity extends Activity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnTitleAllBtn:
-                ChoiceDialogFragment dialog = dialogCreator.getChoiceDialog(true);
+                MultiChoiceDialog dialog = dialogFactory.createMultiChoiceDialog();
                 dialog.setTitle("Title");
                 List<String> items = new ArrayList<>();
                 items.add("First");

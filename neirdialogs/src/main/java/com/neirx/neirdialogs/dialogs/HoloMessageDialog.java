@@ -154,7 +154,7 @@ public class HoloMessageDialog extends HoloBaseDialog implements MessageDialog {
             message = "";
         }
         tvMessage.setText(message);
-        if(messageColor > -1) tvMessage.setTextColor(messageColor);
+        tvMessage.setTextColor(messageColor);
         if(messageSize > 0) tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, messageSize);
 
         if(messageTypeface != null && messageStyle != null) tvMessage.setTypeface(messageTypeface, messageStyle.getValue());
