@@ -1,6 +1,7 @@
 package com.neirx.neirdialogsdemo;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.neirx.neirdialogs.HoloDialogFactory;
 
@@ -20,6 +21,8 @@ public class CustomDialogFactory extends HoloDialogFactory {
 
     public CustomDialogFactory(Context context) {
         super(context);
-        setBackgroundDialogRes(R.drawable.fon);
+        //setBackgroundDialogRes(R.drawable.fon);
+        //setListItemSelector(R.drawable.custom_list_item_selector);
+        //setListDividerColor(Color.RED);
     }
 }

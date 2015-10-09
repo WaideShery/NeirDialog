@@ -45,7 +45,7 @@ public class ListDialogActivity extends Activity implements View.OnClickListener
                 dialogFragment.setTitle("Title");
                 dialogFragment.setItems(new String[]{"Первый", "Второй", "Третий"});
                 dialogFragment.setOnItemClickListener(this, "btnWithTitle");
-                ((HoloListDialog)dialogFragment).setDialogBackgroundColor(Color.GREEN);
+                //((HoloListDialog)dialogFragment).setDialogBackgroundColor(Color.GREEN);
                 dialogFragment.show(manager, "btnWithTitle");
                 break;
             case R.id.btnWithoutTitle:

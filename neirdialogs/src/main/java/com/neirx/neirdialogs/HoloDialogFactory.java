@@ -3,6 +3,8 @@ package com.neirx.neirdialogs;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.Log;
 import android.view.Gravity;
@@ -211,12 +213,12 @@ public class HoloDialogFactory implements DialogFactory {
     /**
      * Ширина горизонтальной и вертикальных линий layout'а кнопок в dp.
      */
-    private int dividerBtnHorizontalWidth;
-    private int dividerBtnVerticalWidth;
-    public void setDividerButtonHorizontalWidth(int widthDp) {
+    private float dividerBtnHorizontalWidth;
+    private float dividerBtnVerticalWidth;
+    public void setDividerButtonHorizontalWidth(float widthDp) {
         this.dividerBtnHorizontalWidth = widthDp;
     }
-    public void setDividerButtonVerticalWidth(int widthDp) {
+    public void setDividerButtonVerticalWidth(float widthDp) {
         this.dividerBtnVerticalWidth = widthDp;
     }
 
@@ -311,6 +313,25 @@ public class HoloDialogFactory implements DialogFactory {
     }
 
     /**
+     * Параметры разделяющей линии в ListDialog.
+     */
+    private @ColorRes int listDividerColorId;
+    private float listDividerHeightDp;
+    private Drawable listDividerDrawable;
+    private boolean isListDividerDrawable;
+    public void setListDividerColor(int colorId) {
+        this.listDividerColorId = colorId;
+        isListDividerDrawable = false;
+    }
+    public void setListDividerHeight(@ColorRes float heightDp) {
+        this.listDividerHeightDp = heightDp;
+    }
+    public void setListDividerDrawable(Drawable dividerDrawable) {
+        this.listDividerDrawable = dividerDrawable;
+        isListDividerDrawable = true;
+    }
+
+    /**
      * Ресурс селектора фона пунктов в SingleChoiceDialog.
      */
     private
@@ -381,6 +402,25 @@ public class HoloDialogFactory implements DialogFactory {
         this.tvSChoiceItemPaddingTop = topPaddingDp;
         this.tvSChoiceItemPaddingEnd = endPaddingDp;
         this.tvSChoiceItemPaddingBottom = bottomPaddingDp;
+    }
+
+    /**
+     * Параметры разделяющей линии в SingleChoiceDialog.
+     */
+    private @ColorRes int sChoiceDividerColorId;
+    private float sChoiceDividerHeightDp;
+    private Drawable sChoiceDividerDrawable;
+    private boolean isSChoiceDividerDrawable;
+    public void setSChoiceDividerColor(int colorId) {
+        this.sChoiceDividerColorId = colorId;
+        isSChoiceDividerDrawable = false;
+    }
+    public void setSChoiceDividerHeight(float heightDp) {
+        this.sChoiceDividerHeightDp = heightDp;
+    }
+    public void setSChoiceDividerDrawable(Drawable dividerDrawable) {
+        this.sChoiceDividerDrawable = dividerDrawable;
+        isSChoiceDividerDrawable = true;
     }
 
     /**
@@ -455,6 +495,25 @@ public class HoloDialogFactory implements DialogFactory {
         this.tvMChoiceItemPaddingBottom = bottomPaddingDp;
     }
 
+    /**
+     * Параметры разделяющей линии в MultiChoiceDialog.
+     */
+    private @ColorRes int mChoiceDividerColorId;
+    private float mChoiceDividerHeightDp;
+    private Drawable mChoiceDividerDrawable;
+    private boolean isMChoiceDividerDrawable;
+    public void setMChoiceDividerColor(int colorId) {
+        this.mChoiceDividerColorId = colorId;
+        isMChoiceDividerDrawable = false;
+    }
+    public void setMChoiceDividerHeight(float heightDp) {
+        this.mChoiceDividerHeightDp = heightDp;
+    }
+    public void setMChoiceDividerDrawable(Drawable dividerDrawable) {
+        this.mChoiceDividerDrawable = dividerDrawable;
+        isMChoiceDividerDrawable = true;
+    }
+
 
 
     private int editTextColor, hintTextColor;
@@ -499,8 +558,8 @@ public class HoloDialogFactory implements DialogFactory {
         isDividerBtnVerticalRes = false;
         dividerBtnVerticalColor = context.getResources().getColor(R.color.holo_button_divider);
 
-        dividerBtnHorizontalWidth = 1;
-        dividerBtnVerticalWidth = 1;
+        dividerBtnHorizontalWidth = 0.8f;
+        dividerBtnVerticalWidth = 0.8f;
 
         messageTextColor = context.getResources().getColor(R.color.holo_message_text);
         messageTextSize = 18;
@@ -523,10 +582,14 @@ public class HoloDialogFactory implements DialogFactory {
 
         listItemTextGravity = -1;
 
-        tvListItemPaddingStart = 18;
-        tvListItemPaddingTop = 18;
-        tvListItemPaddingEnd = 18;
-        tvListItemPaddingBottom = 18;
+        tvListItemPaddingStart = 24;
+        tvListItemPaddingTop = 24;
+        tvListItemPaddingEnd = 24;
+        tvListItemPaddingBottom = 24;
+
+        isListDividerDrawable = false;
+        listDividerColorId = context.getResources().getColor(R.color.holo_list_divider);
+        listDividerHeightDp = 0.8f;
 
         sChoiceItemBackgroundSelector = R.drawable.holo_list_item_selector;
 
@@ -545,6 +608,10 @@ public class HoloDialogFactory implements DialogFactory {
         tvSChoiceItemPaddingEnd = 18;
         tvSChoiceItemPaddingBottom = 18;
 
+        isSChoiceDividerDrawable = false;
+        sChoiceDividerColorId = context.getResources().getColor(R.color.holo_list_divider);
+        sChoiceDividerHeightDp = 0.8f;
+
         mChoiceItemBackgroundSelector = R.drawable.holo_list_item_selector;
 
         isMChoiceLeftFlag = false;
@@ -561,6 +628,10 @@ public class HoloDialogFactory implements DialogFactory {
         tvMChoiceItemPaddingTop = 18;
         tvMChoiceItemPaddingEnd = 18;
         tvMChoiceItemPaddingBottom = 18;
+
+        isMChoiceDividerDrawable = false;
+        mChoiceDividerColorId = context.getResources().getColor(R.color.holo_list_divider);
+        mChoiceDividerHeightDp = 0.8f;
 
 
         editTextColor = context.getResources().getColor(R.color.holo_edit_text);
@@ -586,8 +657,12 @@ public class HoloDialogFactory implements DialogFactory {
         dialog.setItemTextGravity(listItemTextGravity);
         dialog.setItemTextPaddingDP(tvListItemPaddingStart, tvListItemPaddingTop,
                 tvListItemPaddingEnd, tvListItemPaddingBottom);
+        if(isListDividerDrawable) dialog.setDividerDrawable(listDividerDrawable);
+        else dialog.setDividerColorId(listDividerColorId);
+        dialog.setDividerHeightDp(listDividerHeightDp);
         return dialog;
     }
+
 
     /**
      * Создание и установка настроек SingleChoiceDialog.
@@ -608,6 +683,9 @@ public class HoloDialogFactory implements DialogFactory {
         dialog.setItemTextGravity(mChoiceItemTextGravity);
         dialog.setItemTextPaddingDP(tvMChoiceItemPaddingStart, tvMChoiceItemPaddingTop,
                 tvMChoiceItemPaddingEnd, tvMChoiceItemPaddingBottom);
+        if(isSChoiceDividerDrawable) dialog.setDividerDrawable(sChoiceDividerDrawable);
+        else dialog.setDividerColorId(sChoiceDividerColorId);
+        dialog.setDividerHeightDp(sChoiceDividerHeightDp);
         return dialog;
     }
 
@@ -630,6 +708,9 @@ public class HoloDialogFactory implements DialogFactory {
         dialog.setItemTextGravity(mChoiceItemTextGravity);
         dialog.setItemTextPaddingDP(tvMChoiceItemPaddingStart, tvMChoiceItemPaddingTop,
                 tvMChoiceItemPaddingEnd, tvMChoiceItemPaddingBottom);
+        if(isMChoiceDividerDrawable) dialog.setDividerDrawable(mChoiceDividerDrawable);
+        else dialog.setDividerColorId(mChoiceDividerColorId);
+        dialog.setDividerHeightDp(mChoiceDividerHeightDp);
         return dialog;
     }
 

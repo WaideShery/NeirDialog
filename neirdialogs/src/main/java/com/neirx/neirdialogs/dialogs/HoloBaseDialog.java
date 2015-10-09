@@ -55,7 +55,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
     private @DrawableRes int topDividerBtnResId = -1, leftDividerBtnResId = -1, rightDividerBtnResId = -1;
     private boolean isTopDividerBtnRes, isLeftDividerBtnRes, isRightDividerBtnRes;
 
-    protected int topDividerBtnWidth = 0, leftDividerBtnWidth = 0, rightDividerBtnWidth = 0;
+    protected float topDividerBtnWidth = 0, leftDividerBtnWidth = 0, rightDividerBtnWidth = 0;
 
     //Обработчик нажатий на кнопки
     protected NeirDialogInterface.OnClickListener onClickListener;
@@ -446,7 +446,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      *
      * @param widthDp ширина в dp
      */
-    public void setDividersBtnWidth(int widthDp) {
+    public void setDividersBtnWidth(float widthDp) {
         topDividerBtnWidth = widthDp;
         leftDividerBtnWidth = widthDp;
         rightDividerBtnWidth = widthDp;
@@ -457,7 +457,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      *
      * @param widthDp ширина в dp
      */
-    public void setTopDividerBtnWidth(int widthDp) {
+    public void setTopDividerBtnWidth(float widthDp) {
         topDividerBtnWidth = widthDp;
     }
 
@@ -466,7 +466,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      *
      * @param widthDp ширина в dp
      */
-    public void setLeftDividerBtnWidth(int widthDp) {
+    public void setLeftDividerBtnWidth(float widthDp) {
         leftDividerBtnWidth = widthDp;
     }
 
@@ -476,7 +476,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
      *
      * @param widthDp ширина в dp
      */
-    public void setRightDividerBtnWidth(int widthDp) {
+    public void setRightDividerBtnWidth(float widthDp) {
         rightDividerBtnWidth = widthDp;
     }
 
@@ -566,7 +566,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
         if(isTopDividerBtnRes)lineBtnTopHor.setBackgroundResource(topDividerBtnResId);
         else lineBtnTopHor.setBackgroundColor(topDividerBtnColor);
         if(topDividerBtnWidth > 0) {
-            int height = (int) getDP(topDividerBtnWidth);
+            int height = (int) getPX(topDividerBtnWidth);
             lineBtnTopHor.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
         }
     }
@@ -579,7 +579,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
         else lineBtnLeftVer.setBackgroundColor(leftDividerBtnColor);
         Log.d(Statical.TAG, "leftDividerBtnColor = " + leftDividerBtnColor);
         if(leftDividerBtnWidth > 0) {
-            int width = (int) getDP(leftDividerBtnWidth);
+            int width = (int) getPX(leftDividerBtnWidth);
             lineBtnLeftVer.setLayoutParams(new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
         }
     }
@@ -592,7 +592,7 @@ public abstract class HoloBaseDialog extends HoloRootDialog implements View.OnCl
         else lineBtnRightVer.setBackgroundColor(rightDividerBtnColor);
         Log.d(Statical.TAG, "rightDividerBtnColor = " + rightDividerBtnColor);
         if(rightDividerBtnWidth > 0) {
-            int width = (int) getDP(rightDividerBtnWidth);
+            int width = (int) getPX(rightDividerBtnWidth);
             lineBtnRightVer.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.MATCH_PARENT));
         }
     }

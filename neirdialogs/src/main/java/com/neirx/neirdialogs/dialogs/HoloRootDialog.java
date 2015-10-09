@@ -9,14 +9,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.neirx.neirdialogs.Statical;
 import com.neirx.neirdialogs.enums.TextStyle;
 
 /**
@@ -292,7 +289,7 @@ public abstract class HoloRootDialog extends DialogFragment {
         else dividerTitle.setBackgroundColor(dividerTitleColor);
 
         if(dividerTitleWidth > 0) {
-            int height = (int) getDP(dividerTitleWidth);
+            int height = (int) getPX(dividerTitleWidth);
             dividerTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
         }
 
@@ -301,7 +298,7 @@ public abstract class HoloRootDialog extends DialogFragment {
     /**
      * Вычисление dp.
      */
-    protected float getDP(float value){
+    protected float getPX(float value){
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
 }

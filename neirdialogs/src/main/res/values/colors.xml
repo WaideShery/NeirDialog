@@ -10,6 +10,7 @@
     <color name="holo_list_item_text">#ff000000</color>
     <color name="holo_edit_text">#ff000000</color>
     <color name="holo_edit_text_hint">#8e8e8e</color>
+    <color name="holo_list_divider">#ffbfbfbf</color>
 
 
     <!--color name="holo_green_dark">#669900</color>

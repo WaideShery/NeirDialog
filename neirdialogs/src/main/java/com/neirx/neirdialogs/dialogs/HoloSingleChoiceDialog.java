@@ -2,7 +2,10 @@ package com.neirx.neirdialogs.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neirx.neirdialogs.R;
+import com.neirx.neirdialogs.Statical;
 import com.neirx.neirdialogs.adapters.SingleChoiceAdapter;
 import com.neirx.neirdialogs.interfaces.NeirDialogInterface;
 import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
@@ -81,5 +85,15 @@ public class HoloSingleChoiceDialog extends HoloChoiceDialog implements SingleCh
         adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
 
         lvChoice.setAdapter(adapter);
+
+        if(isDividerDrawable && dividerDrawable != null){
+            lvChoice.setDivider(dividerDrawable);
+        } else {
+            Drawable defaultDivider = getResources().getDrawable(R.drawable.list_divider);
+            assert defaultDivider != null;
+            defaultDivider.setColorFilter(dividerColorId, PorterDuff.Mode.SRC_ATOP);
+            lvChoice.setDivider(defaultDivider);
+        }
+        lvChoice.setDividerHeight((int) getPX(dividerHeightDp));
     }
 }

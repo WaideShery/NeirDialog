@@ -2,6 +2,8 @@ package com.neirx.neirdialogs.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,5 +82,15 @@ public class HoloMultiChoiceDialog extends HoloChoiceDialog implements MultiChoi
         adapter.setItemTextPadding(itemPaddingStart, itemPaddingTop, itemPaddingEnd, itemPaddingBottom);
 
         lvChoice.setAdapter(adapter);
+
+        if(isDividerDrawable && dividerDrawable != null){
+            lvChoice.setDivider(dividerDrawable);
+        } else {
+            Drawable defaultDivider = getResources().getDrawable(R.drawable.list_divider);
+            assert defaultDivider != null;
+            defaultDivider.setColorFilter(dividerColorId, PorterDuff.Mode.SRC_ATOP);
+            lvChoice.setDivider(defaultDivider);
+        }
+        lvChoice.setDividerHeight((int) getPX(dividerHeightDp));
     }
 }

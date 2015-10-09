@@ -1,8 +1,13 @@
 package com.neirx.neirdialogs.dialogs;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 import android.widget.ListView;
+
+import com.neirx.neirdialogs.Statical;
 import com.neirx.neirdialogs.enums.TextStyle;
 import com.neirx.neirdialogs.interfaces.SingleChoiceDialog;
 
@@ -21,7 +26,41 @@ public abstract class HoloChoiceDialog extends HoloBaseDialog  implements Single
     protected int itemTextGravity = -1;
     protected int itemBackgroundSelectorId = -1;
     protected int itemPaddingStart = -1, itemPaddingTop = -1, itemPaddingEnd = -1, itemPaddingBottom = -1;
+    protected @ColorRes
+    int dividerColorId;
+    protected float dividerHeightDp;
+    protected Drawable dividerDrawable;
+    protected boolean isDividerDrawable;
 
+
+    /**
+     * Установка ресурса разделяющей линии между пунктами списка.
+     *
+     * @param drawable ресурс разделяющей линии
+     */
+    public void setDividerDrawable(Drawable drawable){
+        dividerDrawable = drawable;
+        isDividerDrawable = true;
+    }
+
+    /**
+     * Установка цвета разделяющей линии между пунктами списка.
+     *
+     * @param dividerColorId ресурс цвета
+     */
+    public void setDividerColorId(int dividerColorId) {
+        this.dividerColorId = dividerColorId;
+        isDividerDrawable = false;
+    }
+
+    /**
+     *  Установка ширины разделяющей линии между пунктами списка.
+     *
+     * @param dividerHeightDp ширина в dp.
+     */
+    public void setDividerHeightDp(float dividerHeightDp) {
+        this.dividerHeightDp = dividerHeightDp;
+    }
 
     /**
      * Установка списка для адаптера ListView.
